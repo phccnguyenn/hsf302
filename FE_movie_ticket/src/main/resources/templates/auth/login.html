@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header}"></head>
+
+<body>
+<!-- 1. Include the main navigation bar using a Thymeleaf fragment -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Main content area for the login page -->
+<main class="login-page-main">
+    <div class="login-container">
+        <h1>Sign In</h1>
+        <p class="login-subtitle">Welcome back! Please enter your details.</p>
+
+        <!-- A proper form tag for submitting data -->
+        <form action="#" th:action="@{/login}" method="post">
+
+            <!-- Email Input Group -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <!-- Password Input Group -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <!-- Sign In Button -->
+            <button type="submit" class="btn btn-primary btn-full-width">Sign In</button>
+
+            <!-- Forgot Password Link -->
+            <div class="login-links">
+                <a href="#">Forgot password?</a>
+            </div>
+        </form>
+
+        <!-- 2. "Don't have an account yet?" line, as requested -->
+        <div class="signup-prompt">
+            <p>Don't have an account yet? <a th:href="@{/register}">Sign Up</a></p>
+        </div>
+    </div>
+</main>
+
+<!-- Note: It's common practice to omit the main footer on login/register pages to reduce distractions. -->
+</body>
+</html>

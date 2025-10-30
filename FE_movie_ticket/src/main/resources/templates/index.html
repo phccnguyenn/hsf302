@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- This <head> tag will be completely replaced by the content of the fragment -->
+<head th:replace="~{fragments/header :: header}"></head>
+
+<body>
+
+<!-- ================================== -->
+<!--      HEADER / NAVIGATION           -->
+<!-- ================================== -->
+<!--
+      THIS IS THE MAGIC LINE:
+      It finds the 'navbar.html' file inside the 'fragments' folder,
+      looks for the piece named 'navbar', and replaces this div with it.
+    -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+    <!-- ================================== -->
+    <!--      HERO / CYCLE BANNER (SWIPER)  -->
+    <!-- ================================== -->
+    <!-- 1. The main Swiper container -->
+    <div class="swiper hero-swiper">
+        <!-- 2. The wrapper for all the slides -->
+        <div class="swiper-wrapper">
+            <!-- 3. Individual Slides -->
+            <div class="swiper-slide hero-slide" style="background-image: url('https://via.placeholder.com/1200x600.png/E50914/FFFFFF?text=DUNE:+PART+TWO');">
+                <div class="hero-slide-content">
+                    <h2>Dune: Part Two</h2>
+                    <p>Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.</p>
+                    <a href="#" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+            <div class="swiper-slide hero-slide" style="background-image: url('https://via.placeholder.com/1200x600.png/1F1F1F/FFFFFF?text=OPPENHEIMER');">
+                <div class="hero-slide-content">
+                    <h2>Oppenheimer</h2>
+                    <p>The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.</p>
+                    <a href="#" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+            <div class="swiper-slide hero-slide" style="background-image: url('https://via.placeholder.com/1200x600.png/333333/FFFFFF?text=SPIDER-MAN');">
+                <div class="hero-slide-content">
+                    <h2>Spider-Man: Across the Spider-Verse</h2>
+                    <p>Miles Morales catapults across the Multiverse, where he encounters a team of Spider-People charged with protecting its very existence.</p>
+                    <a href="#" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Navigation Arrows -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+
+        <!-- 5. Pagination Dots -->
+        <div class="swiper-pagination"></div>
+    </div>
+
+
+    <!-- ================================== -->
+    <!--      MOVIE SELECTION SECTION       -->
+    <!-- ================================== -->
+    <section class="movie-section container">
+        <div class="section-header">
+            <h2 class="section-title">Movie Selection</h2>
+            <a th:href="@{/movies}" class="see-all-link">See All &rarr;</a>
+        </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="movie-tabs">
+            <button class="active">Now Showing</button>
+            <button>Coming Soon</button>
+        </div>
+
+        <!-- MOVIE GRID (DYNAMIC CONTENT) -->
+        <div class="movie-grid active">
+            <!-- Thymeleaf Loop for "Now Showing" Movies -->
+            <div class="movie-card" th:each="movie : ${nowShowingMovies}">
+                <img th:src="${movie.posterUrl}" alt="Movie Poster">
+                <div class="movie-card-content">
+                    <h3 th:text="${movie.title}">Movie Title</h3>
+                    <p>
+                        <span th:text="${movie.genre}">Genre</span> |
+                        <span th:text="${movie.durationMin} + ' min'">Duration</span>
+                    </p>
+                </div>
+                <div class="movie-card-actions">
+                    <a th:href="@{/movies/{id}(id=${movie.id})}" class="btn btn-secondary">Details</a>
+                    <a th:href="@{/booking/{id}/showtimes(id=${movie.id})}" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- ================================== -->
+<!--      FOOTER                        -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- include the Swiper.js library -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<!-- write your script to initialize Swiper -->
+<script>
+    // This is the JavaScript code that finds the div with the class 'hero-swiper'
+    // and turns it into a functional, cycling carousel.
+    const swiper = new Swiper('.hero-swiper', {
+        // Configuration options
+        loop: true,         // Enables continuous looping
+        autoplay: {
+            delay: 5000,    // Auto-plays every 5 seconds
+            disableOnInteraction: false,
+        },
+
+        // Activates the pagination dots
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+
+        // Activates the navigation arrows
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+</script>
+</body>
+</html>

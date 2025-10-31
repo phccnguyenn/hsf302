@@ -3,6 +3,7 @@ package javafx.fe_movie_ticket.controller;
 import javafx.fe_movie_ticket.entity.Cinema;
 import javafx.fe_movie_ticket.entity.Movie;
 import javafx.fe_movie_ticket.entity.Showtime;
+import javafx.fe_movie_ticket.entity.Refreshment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +22,13 @@ public class BookingController {
             @PathVariable("showtimeId") Long showtimeId,
             Model model) {
 
-        // In a real app, you would use these IDs to fetch all the necessary
-        // information: movie title, showtime, auditorium layout, and which seats are already booked.
-
-        // For now, we just pass the IDs to the page to confirm they were received.
+        // Mock movie and showtime data
+        Movie mockMovie = new Movie(movieId, "Dune: Part Two", "Sci-Fi", 166, 
+            "https://via.placeholder.com/300x450/0066cc/white?text=Dune+Part+Two", 
+            "Now Showing", "PG-13", "A mythic and emotionally charged hero's journey", 
+            "https://www.youtube.com/embed/sample");
+        
+        model.addAttribute("movie", mockMovie);
         model.addAttribute("movieId", movieId);
         model.addAttribute("showtimeId", showtimeId);
 
@@ -61,5 +65,58 @@ public class BookingController {
         // 4. Return the new template name
         return "showtimes-by-movie";
     }
-
+    
+    @GetMapping("/booking/refreshments")
+    public String showRefreshmentSelection(Model model) {
+        // Mock refreshment categories
+        Map<String, List<Refreshment>> refreshmentsByCategory = new LinkedHashMap<>();
+        
+        // Combos
+        refreshmentsByCategory.put("COMBO", List.of(
+            new Refreshment(1L, "CGV Combo 1", "1 bắp rang bơ vừa + 1 nước ngọt", 149000, "COMBO", 
+                "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop"),
+            new Refreshment(2L, "CGV Combo 2", "1 bắp rang bơ lớn + 2 nước ngọt", 219000, "COMBO", 
+                "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop")
+        ));
+        
+        // Popcorn - 3 vị, 2 size
+        refreshmentsByCategory.put("POPCORN", List.of(
+            new Refreshment(3L, "Bắp rang bơ vừa", "Bắp ngô rang bơ thơm ngon", 79000, "POPCORN", 
+                "https://images.unsplash.com/photo-1585647347483-22b66260dfff?w=400&h=300&fit=crop"),
+            new Refreshment(4L, "Bắp rang bơ lớn", "Bắp ngô rang bơ thơm ngon", 99000, "POPCORN", 
+                "https://images.unsplash.com/photo-1585647347483-22b66260dfff?w=400&h=300&fit=crop"),
+            new Refreshment(5L, "Bắp caramel vừa", "Bắp phủ caramel ngọt ngào", 89000, "POPCORN", 
+                "https://images.unsplash.com/photo-1585647347483-22b66260dfff?w=400&h=300&fit=crop"),
+            new Refreshment(6L, "Bắp caramel lớn", "Bắp phủ caramel ngọt ngào", 109000, "POPCORN", 
+                "https://images.unsplash.com/photo-1585647347483-22b66260dfff?w=400&h=300&fit=crop"),
+            new Refreshment(7L, "Bắp phô mai vừa", "Bắp phủ phô mai đậm đà", 89000, "POPCORN", 
+                "https://images.unsplash.com/photo-1585647347483-22b66260dfff?w=400&h=300&fit=crop"),
+            new Refreshment(8L, "Bắp phô mai lớn", "Bắp phủ phô mai đậm đà", 109000, "POPCORN", 
+                "https://images.unsplash.com/photo-1585647347483-22b66260dfff?w=400&h=300&fit=crop")
+        ));
+        
+        // Drinks - 2 loại nước, 2 size
+        refreshmentsByCategory.put("DRINK", List.of(
+            new Refreshment(9L, "Pepsi vừa", "Nước ngọt có gas", 49000, "DRINK", 
+                "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400&h=300&fit=crop"),
+            new Refreshment(10L, "Pepsi lớn", "Nước ngọt có gas", 69000, "DRINK", 
+                "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400&h=300&fit=crop"),
+            new Refreshment(11L, "7UP vừa", "Nước ngọt chanh", 49000, "DRINK", 
+                "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400&h=300&fit=crop"),
+            new Refreshment(12L, "7UP lớn", "Nước ngọt chanh", 69000, "DRINK", 
+                "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400&h=300&fit=crop")
+        ));
+        
+        // Snacks
+        refreshmentsByCategory.put("SNACK", List.of(
+            new Refreshment(13L, "Kẹo dẻo", "Kẹo dẻo nhiều vị", 45000, "SNACK", 
+                "https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?w=400&h=300&fit=crop"),
+            new Refreshment(14L, "Chocolate", "Socola đầy màu sắc", 55000, "SNACK", 
+                "https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?w=400&h=300&fit=crop")
+        ));
+        
+        model.addAttribute("refreshmentsByCategory", refreshmentsByCategory);
+        return "refreshment-selection";
+    }
+    
 }

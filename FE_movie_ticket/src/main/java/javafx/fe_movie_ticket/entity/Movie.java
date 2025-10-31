@@ -119,4 +119,9 @@ public class Movie {
     public void setTrailerUrl(String trailerUrl) {
         this.trailerUrl = trailerUrl;
     }
+    
+    // Alias method for compatibility
+    public int getDuration() {
+        return durationMin;
+    }
 }

@@ -3,20 +3,16 @@ package javafx.fe_movie_ticket.entity;
 public class Showtime {
     private Long id;
     private String time; // e.g., "04:30 PM"
-    private String format; // e.g., "2D"
+    private Auditorium auditorium; // CHANGE: Link to the Auditorium object
+
 
     public Showtime() {
     }
 
-    public Showtime(Long id, String time, String format) {
+    public Showtime(Long id, String time, Auditorium auditorium) {
         this.id = id;
         this.time = time;
-        this.format = format;
-    }
-
-    public Showtime(String time, String format) {
-        this.time = time;
-        this.format = format;
+        this.auditorium = auditorium;
     }
 
     public Long getId() {
@@ -35,11 +31,11 @@ public class Showtime {
         this.time = time;
     }
 
-    public String getFormat() {
-        return format;
+    public Auditorium getAuditorium() {
+        return auditorium;
     }
 
-    public void setFormat(String format) {
-        this.format = format;
+    public void setAuditorium(Auditorium auditorium) {
+        this.auditorium = auditorium;
     }
 }

@@ -713,3 +713,68 @@ a {
     font-size: 1.1em;
     padding: 12px 25px;
 }
+
+/* --- 12. Theaters Page - Multi-Step Selection Styles --- */
+
+/* Base container for each step */
+.selection-container {
+    display: none; /* All steps are hidden by default */
+    margin-top: 40px;
+}
+.selection-container.active {
+    display: block; /* The active step is shown */
+}
+
+.selection-title {
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--color-text-secondary);
+}
+.selection-title span {
+    color: var(--color-text-primary);
+    font-weight: bold;
+}
+
+.selection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+.cinema-list {
+    display: none; /* JS will manage showing the correct one */
+}
+
+.selection-item {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    padding: 25px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid #333;
+    transition: all 0.3s;
+}
+
+.selection-item:hover {
+    border-color: var(--color-primary);
+    background-color: #2a2a2a;
+    transform: translateY(-5px);
+}
+
+.back-btn {
+    background: none;
+    border: 1px solid var(--color-text-secondary);
+    color: var(--color-text-secondary);
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 30px;
+    display: inline-block;
+}
+.back-btn:hover {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+}

@@ -1,9 +1,6 @@
 package javafx.fe_movie_ticket.controller;
 
-import javafx.fe_movie_ticket.entity.Cinema;
-import javafx.fe_movie_ticket.entity.Movie;
-import javafx.fe_movie_ticket.entity.Showtime;
-import javafx.fe_movie_ticket.entity.Refreshment;
+import javafx.fe_movie_ticket.entity.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,35 +31,42 @@ public class BookingController {
 
         return "seat-selection";
     }
+   
+    // THIS IS THE CORRECTED METHOD
     @GetMapping("/booking/{movieId}/showtimes")
     public String showShowtimesByMovie(@PathVariable("movieId") Long movieId, Model model) {
-        // 1. Mock the movie being booked
-        Movie mockMovie = new Movie(movieId, "Dune: Part Two", "Sci-Fi", 166, "...", "...", "...", "...", "...");
+
+        // 1. Mock the specific movie being booked
+        Movie mockMovie = new Movie(movieId, "Dune: Part Two", "Sci-Fi", 166, "/images/movie_posters/dune2.jpg", "NOW_SHOWING", "PG-13", "...", "...");
         model.addAttribute("movie", mockMovie);
 
-        // 2. Mock the data structure: A list of showtimes grouped by cinema
+        // 2. Create mock auditoriums for the selected cinema
+        Auditorium standardScreen = new Auditorium(501L, "Screen 1", "2D Phụ Đề Anh");
+        // (If you had other auditoriums like Gold Class, you would define them here too)
+
+        // 3. Create showtimes linked to those specific auditoriums
+        List<Showtime> showtimesForCinema1 = List.of(
+                new Showtime(101L, "13:40", standardScreen), // Use the Auditorium object
+                new Showtime(102L, "18:30", standardScreen)  // Use the Auditorium object
+        );
+        List<Showtime> showtimesForCinema2 = List.of(
+                new Showtime(103L, "15:20", standardScreen), // Assuming a standard screen here too
+                new Showtime(104L, "19:45", standardScreen)
+        );
+
+        // 4. Group the showtimes by cinema (as the page layout requires)
         Map<Cinema, List<Showtime>> showtimesByCinema = new LinkedHashMap<>();
 
-        // Mock Cinema 1 and its showtimes
         Cinema cinema1 = new Cinema(201L, "CGV Vincom Center Bà Triệu", "Hà Nội");
-        List<Showtime> showtimes1 = List.of(
-                new Showtime(101L, "13:40", "2D"),
-                new Showtime(102L, "18:30", "2D")
-        );
-        showtimesByCinema.put(cinema1, showtimes1);
+        showtimesByCinema.put(cinema1, showtimesForCinema1);
 
-        // Mock Cinema 2 and its showtimes
         Cinema cinema2 = new Cinema(202L, "CGV Vincom Bắc Từ Liêm", "Hà Nội");
-        List<Showtime> showtimes2 = List.of(
-                new Showtime(103L, "15:20", "2D"),
-                new Showtime(104L, "19:45", "2D")
-        );
-        showtimesByCinema.put(cinema2, showtimes2);
+        showtimesByCinema.put(cinema2, showtimesForCinema2);
 
-        // 3. Add the map to the model
+        // 5. Add the final data structure to the model
         model.addAttribute("showtimesByCinema", showtimesByCinema);
 
-        // 4. Return the new template name
+        // 6. Return the template name
         return "showtimes-by-movie";
     }
     

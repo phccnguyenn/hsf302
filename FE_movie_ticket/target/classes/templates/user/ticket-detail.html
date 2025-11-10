@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header}"></head>
+
+<body>
+
+<!-- Navigation -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main>
+    <div class="container">
+        <!-- Back Button -->
+        <div class="page-navigation">
+            <a href="javascript:history.back()" class="back-btn">
+                ← Back to My Tickets
+            </a>
+        </div>
+
+        <!-- Ticket Detail Container -->
+        <div class="ticket-detail-container">
+            <div class="ticket-detail-header">
+                <h1>Ticket Details</h1>
+                <div class="ticket-status-large" th:classappend="${ticket.statusBadgeClass}">
+                    <span th:text="${ticket.statusText}">Confirmed</span>
+                </div>
+            </div>
+
+            <!-- Digital Ticket Card -->
+            <div class="digital-ticket">
+                <div class="ticket-design-top">
+                    <div class="cinema-logo">
+                        <h2>CINEPLEX</h2>
+                        <p>Digital Ticket</p>
+                    </div>
+                    <div class="ticket-qr">
+                        <!-- QR Code placeholder -->
+                        <div class="qr-code">
+                            <div class="qr-pattern"></div>
+                        </div>
+                        <p th:text="'Ticket #' + ${ticket.id}">Ticket #TK001</p>
+                    </div>
+                </div>
+
+                <div class="ticket-movie-info">
+                    <div class="movie-poster-small">
+                        <img th:src="${ticket.moviePoster}" th:alt="${ticket.movieTitle}" />
+                    </div>
+                    <div class="movie-info-text">
+                        <h3 class="movie-title" th:text="${ticket.movieTitle}">Spider-Man: No Way Home</h3>
+                        <p class="movie-format" th:text="${ticket.format} + ' Format'">2D Format</p>
+                    </div>
+                </div>
+
+                <div class="ticket-details-grid">
+                    <div class="detail-item">
+                        <span class="label">Cinema</span>
+                        <span class="value" th:text="${ticket.cinemaName}">CGV Vincom Center</span>
+                    </div>
+                    <div class="detail-item" th:if="${ticket.cinemaAddress}">
+                        <span class="label">Address</span>
+                        <span class="value" th:text="${ticket.cinemaAddress}">72 Le Thanh Ton, District 1</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Screen</span>
+                        <span class="value" th:text="${ticket.theaterName}">Screen 1</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Date</span>
+                        <span class="value" th:text="${ticket.formattedShowDate}">Mon, 15 Nov 2024</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Time</span>
+                        <span class="value" th:text="${ticket.formattedShowTime}">19:30</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Seats</span>
+                        <span class="value seat-numbers" th:text="${ticket.seats}">F7, F8</span>
+                    </div>
+                </div>
+
+                <div class="ticket-perforated-line">
+                    <div class="perforation"></div>
+                </div>
+
+                <div class="ticket-payment-info">
+                    <h4>Payment Summary</h4>
+                    <div class="payment-details">
+                        <div class="payment-row" th:if="${ticket.ticketPrice}">
+                            <span>Ticket Price</span>
+                            <span th:text="'x' + ${ticket.quantity}">x2</span>
+                            <span th:text="${#numbers.formatDecimal(ticket.ticketPrice * ticket.quantity, 0, 'COMMA', 0, 'POINT')} + ' VND'">220,000 VND</span>
+                        </div>
+                        <div class="payment-row" th:if="${ticket.serviceFee}">
+                            <span>Service Fee</span>
+                            <span></span>
+                            <span th:text="${#numbers.formatDecimal(ticket.serviceFee, 0, 'COMMA', 0, 'POINT')} + ' VND'">20,000 VND</span>
+                        </div>
+                        <div class="payment-row total">
+                            <span>Total Amount</span>
+                            <span></span>
+                            <span th:text="${ticket.formattedTotalAmount}">240,000 VND</span>
+                        </div>
+                    </div>
+                    <div class="booking-info">
+                        <p>Booked on: <span th:text="${ticket.formattedBookingDate}">14/11/2024 10:30</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="ticket-actions-large">
+                <button class="btn btn-outline download-ticket-btn" th:data-ticket-id="${ticket.id}">
+                    📱 Download Ticket
+                </button>
+                <button class="btn btn-secondary share-ticket-btn">
+                    📤 Share Ticket
+                </button>
+                <button class="btn btn-primary" th:if="${ticket.status == 'confirmed'}" onclick="window.print()">
+                    🖨️ Print Ticket
+                </button>
+            </div>
+
+            <!-- Important Information -->
+            <div class="ticket-important-info">
+                <h4>📋 Important Information</h4>
+                <ul>
+                    <li>Please arrive at the cinema at least 15 minutes before showtime</li>
+                    <li>This ticket is non-refundable and non-transferable</li>
+                    <li>Present this digital ticket or QR code at the entrance</li>
+                    <li>Food and beverages from outside are not permitted</li>
+                    <li>Mobile phones should be switched to silent mode during the movie</li>
+                </ul>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <h4>Need Help?</h4>
+                <p>Contact customer service: <strong>1900 6017</strong></p>
+                <p>Email: <strong>support@cineplex.vn</strong></p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Download ticket functionality
+    const downloadBtn = document.querySelector('.download-ticket-btn');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', function() {
+            const ticketId = this.dataset.ticketId;
+            // Simulate download functionality
+            alert('Downloading ticket ' + ticketId + '...');
+        });
+    }
+
+    // Share ticket functionality
+    const shareBtn = document.querySelector('.share-ticket-btn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', function() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Movie Ticket',
+                    text: 'Check out my movie ticket!',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                const url = window.location.href;
+                navigator.clipboard.writeText(url).then(function() {
+                    alert('Ticket link copied to clipboard!');
+                });
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>

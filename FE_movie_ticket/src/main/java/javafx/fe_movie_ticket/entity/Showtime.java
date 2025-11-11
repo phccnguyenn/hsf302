@@ -1,41 +1,43 @@
 package javafx.fe_movie_ticket.entity;
 
+import jakarta.persistence.*;
+import javafx.fe_movie_ticket.entity.enumeration.Language;
+import javafx.fe_movie_ticket.entity.enumeration.ShowtimeStatus;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+
+@Entity
+@Table(name = "showtimes")
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class Showtime {
-    private Long id;
-    private String time; // e.g., "04:30 PM"
-    private Auditorium auditorium; // CHANGE: Link to the Auditorium object
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long showtimeId;
 
+    @ManyToOne(optional=false, fetch=FetchType.LAZY)
+    @JoinColumn(name="auditorium_id")
+    private Auditorium auditorium;
 
-    public Showtime() {
-    }
+    @Column(nullable=false)
+    private Long movieId;
 
-    public Showtime(Long id, String time, Auditorium auditorium) {
-        this.id = id;
-        this.time = time;
-        this.auditorium = auditorium;
-    }
+    @Column(name="starts_at", nullable=false)
+    private LocalDateTime startsAt;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(name="ends_at", nullable=false)
+    private LocalDateTime endsAt;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(nullable=false, length=10)
+    private Language language;
 
-    public String getTime() {
-        return time;
-    }
+    @Enumerated(EnumType.STRING) @Column(nullable=false, length=12)
+    private ShowtimeStatus status ;
 
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public Auditorium getAuditorium() {
-        return auditorium;
-    }
-
-    public void setAuditorium(Auditorium auditorium) {
-        this.auditorium = auditorium;
-    }
 }

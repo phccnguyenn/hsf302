@@ -1,40 +1,33 @@
 package javafx.fe_movie_ticket.entity;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "cinemas")
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class Cinema {
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long cinemaId;
+
+    @Column(nullable=false, length=120)
     private String name;
-    private String city;
 
-    public Cinema() {
-    }
+    @Column(length=255)
+    private String address;
 
-    public Cinema(Long id, String name, String city) {
-        this.id = id;
-        this.name = name;
-        this.city = city;
-    }
+    @Column(nullable=false)
 
-    public Long getId() {
-        return id;
-    }
+    private boolean isActive = true;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
+    @OneToMany(mappedBy="cinema", cascade=CascadeType.ALL, orphanRemoval=true)
+    private Set<Auditorium> auditoriums = new HashSet<>();
 }

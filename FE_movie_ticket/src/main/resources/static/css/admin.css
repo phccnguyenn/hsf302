@@ -1,0 +1,396 @@
+/* Admin Panel: minimal safe stylesheet
+   - Purpose: *not* to override dashboard inline styles.
+   - Keep only sidebar + basic admin layout rules.
+   If you want the original dashboard styles back, those are applied inline
+   inside the dashboard template; this file now avoids broad selectors.
+*/
+
+/* Basic admin body, non-invasive */
+.admin-body {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+}
+
+/* Sidebar only: keep its styles isolated */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 280px;
+    background: #1f1f1f;
+    border-right: 1px solid #333;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.sidebar-brand { padding: 20px; text-align: center; border-bottom: 1px solid #2b2b2b; }
+.sidebar-brand .brand-logo { color: #E50914; font-weight:700; font-size:1.2rem; }
+
+.sidebar-menu { padding: 12px 0; }
+.menu-section-title { padding: 8px 16px; color: #888; font-size:0.75rem; text-transform:uppercase; }
+.menu-item { display:block; padding:10px 16px; color:#ccc; text-decoration:none; }
+.menu-item:hover { background: rgba(229,9,20,0.05); color:#fff; }
+.menu-item.active { background: rgba(229,9,20,0.08); border-left:3px solid #E50914; }
+
+/* Sidebar user area */
+.sidebar-user { position:absolute; bottom:0; width:100%; border-top:1px solid #2b2b2b; background:#171717; }
+.user-info { padding:12px; display:flex; gap:10px; align-items:center; }
+.user-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(45deg,#E50914,#ff4757); display:flex; align-items:center; justify-content:center; color:#fff; }
+
+/* Layout helpers (minimal) */
+.admin-main { margin-left:280px; padding:24px; }
+@media (max-width:768px) { .admin-main { margin-left:0; padding:16px; } .sidebar{ position:relative; height:auto; width:100%; } }
+
+/* Intentionally avoid styling broad selectors like .card, .table, .stat-card etc.
+   Those are kept to the dashboard template (inline) or to main style.css.
+*/
+.btn-outline-danger {
+    border-color: #dc3545 !important;
+    color: #dc3545 !important;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-success {
+    border-color: #198754 !important;
+    color: #198754 !important;
+}
+
+.btn-outline-success:hover {
+    background-color: #198754 !important;
+    border-color: #198754 !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-secondary {
+    border-color: #6c757d !important;
+    color: #6c757d !important;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: #ffffff !important;
+}
+
+/* Pagination Dark Theme */
+.page-link {
+    background-color: #3d3d3d !important;
+    border-color: #555 !important;
+    color: #ffffff !important;
+}
+
+.page-link:hover {
+    background-color: #E50914 !important;
+    border-color: #E50914 !important;
+    color: #ffffff !important;
+}
+
+.page-item.active .page-link {
+    background-color: #E50914 !important;
+    border-color: #E50914 !important;
+}
+
+.page-item.disabled .page-link {
+    background-color: #2d2d2d !important;
+    border-color: #404040 !important;
+    color: #666 !important;
+}
+
+/* Stats Card Enhancements */
+.stat-card {
+    background: linear-gradient(135deg, #2d2d2d 0%, #3d3d3d 100%) !important;
+    border: 1px solid #404040 !important;
+    border-radius: 12px !important;
+    padding: 1.5rem !important;
+    text-align: center !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+    color: #ffffff !important;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #E50914, #ff4757);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(229, 9, 20, 0.2);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+.stat-content h3 {
+    font-size: 2rem !important;
+    font-weight: bold !important;
+    margin-bottom: 0.5rem !important;
+    background: linear-gradient(45deg, #E50914, #ff4757);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-content p {
+    margin: 0 !important;
+    color: #cccccc !important;
+    font-size: 0.9rem !important;
+}
+
+/* Admin Sidebar Styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 280px;
+    background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%);
+    border-right: 1px solid #333;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    overflow-y: auto;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-brand {
+    padding: 25px 20px;
+    border-bottom: 1px solid #333;
+    text-align: center;
+}
+
+.sidebar-brand .brand-logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #E50914;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.sidebar-brand .brand-subtitle {
+    font-size: 0.85rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidebar-menu {
+    padding: 20px 0;
+}
+
+.menu-section {
+    margin-bottom: 30px;
+}
+
+.menu-section-title {
+    padding: 0 20px 10px 20px;
+    font-size: 0.75rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.menu-item {
+    display: block;
+    padding: 12px 20px;
+    color: #ccc;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    position: relative;
+}
+
+.menu-item:hover {
+    background-color: rgba(229, 9, 20, 0.1);
+    border-left-color: #E50914;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.menu-item.active {
+    background-color: rgba(229, 9, 20, 0.15);
+    border-left-color: #E50914;
+    color: #ffffff;
+}
+
+.menu-item i {
+    width: 20px;
+    margin-right: 12px;
+    font-size: 1rem;
+}
+
+.sidebar-user {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #333;
+    background: linear-gradient(180deg, #2d2d2d 0%, #1a1a1a 100%);
+}
+
+.user-info {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+    background: linear-gradient(45deg, #E50914, #ff4757);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.user-details h4 {
+    color: #ffffff;
+    font-size: 0.9rem;
+    margin: 0 0 3px 0;
+}
+
+.user-details p {
+    color: #888;
+    font-size: 0.75rem;
+    margin: 0;
+}
+
+.user-menu-toggle {
+    position: absolute;
+    right: 15px;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.user-menu-toggle:hover {
+    color: #E50914;
+}
+
+.user-dropdown {
+    display: none;
+    position: absolute;
+    bottom: 70px;
+    left: 20px;
+    right: 20px;
+    background: #333;
+    border-radius: 8px;
+    border: 1px solid #444;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+}
+
+.user-dropdown.show {
+    display: block;
+}
+
+.user-dropdown .dropdown-item {
+    display: block;
+    padding: 10px 15px;
+    color: #ccc;
+    text-decoration: none;
+    border-bottom: 1px solid #444;
+    transition: background-color 0.3s ease;
+}
+
+.user-dropdown .dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.user-dropdown .dropdown-item:hover {
+    background-color: rgba(229, 9, 20, 0.1);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.user-dropdown .dropdown-item i {
+    margin-right: 8px;
+    width: 15px;
+}
+
+/* Mobile Sidebar */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .admin-main {
+        margin-left: 0;
+        padding: 20px 15px;
+    }
+
+    .main-content {
+        padding: 20px 15px;
+    }
+}
+
+/* Dashboard Responsive Design */
+@media (max-width: 1200px) {
+    .chart-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        order: 2;
+    }
+    
+    .main-content {
+        order: 1;
+        padding: 20px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .recent-section {
+        grid-template-columns: 1fr;
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .stat-card {
+        padding: 20px !important;
+    }
+}

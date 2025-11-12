@@ -43,29 +43,20 @@ public class ShowtimeService {
     }
 
 
-//    // Hủy suất chiếu - CHỈ đơn giản update status
-//    public void cancelShowtime(Long showtimeId) {
-//        Showtime showtime = showtimeRepository.findById(showtimeId)
-//                .orElseThrow(() -> new RuntimeException("Showtime not found"));
-//
-//
-//        showtime.setStatus(ShowtimeStatus.CANCELLED);
-//        showtimeRepository.save(showtime);
-//    }
 
-    // Lấy suất chiếu sắp diễn ra
+
     public List<Showtime> getUpcomingShowtimes() {
         return showtimeRepository.findByStartsAtAfterAndStatusOrderByStartsAt(
                 LocalDateTime.now(), ShowtimeStatus.ACTIVE);
     }
 
-    // Lấy chi tiết suất chiếu
+
     public Showtime getShowtimeById(Long showtimeId) {
         return showtimeRepository.findById(showtimeId)
                 .orElseThrow(() -> new RuntimeException("Showtime not found"));
     }
 
-    // Cập nhật suất chiếu
+
     public Showtime updateShowtime(Long showtimeId, Showtime showtimeDetails) {
         Showtime showtime = getShowtimeById(showtimeId);
 

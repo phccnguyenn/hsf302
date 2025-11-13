@@ -31,9 +31,6 @@ public class Seat {
     @Column(length = 5 ,nullable = false)
     private String rowLabel;
 
-//    @Column(nullable = false)
-//    private BigDecimal price;
-
     @Column(nullable = false)
     private boolean isActive ;
 

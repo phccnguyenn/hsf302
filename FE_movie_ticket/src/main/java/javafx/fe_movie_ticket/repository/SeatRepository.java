@@ -11,11 +11,15 @@ import java.util.List;
 @Repository
 public interface SeatRepository extends JpaRepository<Seat,Long> {
 
+    List<Seat> findBySeatTypeAndIsActiveTrue(SeatType seatType);
     List<Seat> findBySeatType(SeatType seatType);
     List<Seat> findByAuditoriumAuditoriumIdAndIsActive(Long auditoriumId, Boolean isActive);
     List<Seat> findByRowLabelAndSeatNumber(String rowLabel, String seatNumber);
     List<Seat> findByAuditoriumId(Long auditoriumId);
     long countByAuditoriumAuditoriumId(Long auditoriumId);
-    boolean existOfSeat (Long auditoriumId, String rowLabel, Integer seatNumber);
 
+    List<Seat> findByRowLabelAndAuditoriumAuditoriumIdAndIsActiveTrue(String rowLabel, Long auditoriumId);
+    List<Seat> findByAuditoriumAuditoriumIdAndIsActiveTrue(Long auditoriumId);
+    boolean existsByAuditoriumAuditoriumIdAndRowLabelAndSeatNumberAndIsActiveTrue(
+            Long auditoriumId, String rowLabel, String seatNumber);
 }

@@ -20,13 +20,8 @@ public class Showtime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long showtimeId;
 
-    @ManyToOne(optional=false, fetch=FetchType.LAZY)
-    @JoinColumn(name="auditorium_id")
-    private Auditorium auditorium;
 
-    @ManyToOne
-    @JoinColumn(name = "movie_id")
-    private Movie movie;
+
 
     @Column(name="starts_at", nullable=false)
     private LocalDateTime startsAt;
@@ -41,4 +36,12 @@ public class Showtime {
     @Enumerated(EnumType.STRING) @Column(nullable=false, length=12)
     private ShowtimeStatus status ;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id")
+    private Movie movie;
+
+    @ManyToOne(optional=false, fetch=FetchType.LAZY)
+    @JoinColumn(name="auditorium_id")
+    private Auditorium auditorium;
 }

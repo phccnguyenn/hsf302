@@ -14,25 +14,23 @@ import java.util.Optional;
 
 @Repository
 public interface ShowtimeRepository extends JpaRepository<Showtime, Long> {
+
+    List<Showtime> findAll();
+
     List<Showtime> findByAuditoriumCinemaCinemaIdAndStartsAtAfter(Long cinemaId, LocalDateTime dateTime);
 
     List<Showtime> findByMovieIdAndStartsAtAfter(Long movieId, LocalDateTime dateTime);
 
     List<Showtime> findByStartsAtAfterAndStatusOrderByStartsAt(LocalDateTime dateTime, ShowtimeStatus status);
 
-    @Query("SELECT s FROM Showtime s WHERE s.auditorium.auditoriumId = :auditoriumId " +
-            "AND s.status = 'ACTIVE' " +
-            "AND ((s.startsAt BETWEEN :start AND :end) OR (s.endsAt BETWEEN :start AND :end))")
-    List<Showtime> findConflictingShowtimes(@Param("auditoriumId") Long auditoriumId,
-                                            @Param("start") LocalDateTime start,
-                                            @Param("end") LocalDateTime end);
 
-//
-//    List<Showtime> findByShowtimeShowtimeId(Long showtimeId);
-//
-//    List<Showtime> findByShowtimeShowtimeIdAndStatus(Long showtimeId, SeatStatus status);
-//
-//    List<Showtime> findByShowtimeShowtimeIdAndSeatSeatIdIn(Long showtimeId, List<Long> seatIds);
-//
-//    Optional<Showtime> findByShowtimeShowtimeIdAndSeatSeatId(Long showtimeId, Long seatId);
+
+    List<Showtime> findByAuditoriumAuditoriumIdAndStatusAndStartsAtBetweenOrEndsAtBetween(
+            Long auditoriumId, ShowtimeStatus status,
+            LocalDateTime start1, LocalDateTime end1,
+            LocalDateTime start2, LocalDateTime end2);
+
+    boolean existsByMovieMovieIdAndStartsAtAfter(Long movieId, LocalDateTime dateTime);
+    List<Showtime> findByMovieMovieIdAndAuditoriumCinemaCinemaIdAndStartsAtAfter(
+            Long movieId, Long cinemaId, LocalDateTime now);
 }

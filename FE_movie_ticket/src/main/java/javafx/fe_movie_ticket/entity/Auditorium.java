@@ -6,49 +6,59 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 @Entity
 @Table(name="auditoriums")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Auditorium {
-//    private Long id;
-//    private String name; // e.g., "Screen 5", "Gold Class 2"
-//    private String format; // e.g., "2D Phụ Đề Anh", "IMAX"
-//
-//    public Auditorium(Long id, String name, String format) {
-//        this.id = id;
-//        this.name = name;
-//        this.format = format;
-//    }
-//
-//
-//
-//    // Getters
-//    public Long getId() { return id; }
-//    public String getName() { return name; }
-//    public String getFormat() { return format; }
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long auditoriumId;
 
-    @ManyToOne(optional=false, fetch= FetchType.LAZY)
-    @JoinColumn(name="cinema_id")
-    private Cinema cinema;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long auditoriumId;
 
-    @Column(nullable=false, length=120)
-    private String name;
+            @ManyToOne(optional=false, fetch= FetchType.LAZY)
+            @JoinColumn(name="cinema_id")
+            private Cinema cinema;
 
-    @Column(nullable=false)
-    private Integer seatCapacity;
+            @Column(nullable=false, length=120)
+            private String name;
 
-    @Column(nullable=false)
-    private boolean isActive = true;
+            @Column(nullable=false)
+            private boolean isActive = true;
 
-    @OneToMany(mappedBy="auditorium", cascade=CascadeType.ALL, orphanRemoval=true)
-    private Set<Seat> seats = new HashSet<>();
+            @OneToMany(mappedBy="auditorium", cascade=CascadeType.ALL, orphanRemoval=true)
+            private Set<Seat> seats = new HashSet<>();
 
-    @OneToMany(mappedBy="auditorium", cascade=CascadeType.ALL, orphanRemoval=true)
-    private Set<Showtime> showtimes = new HashSet<>();
+            @OneToMany(mappedBy="auditorium", cascade=CascadeType.ALL, orphanRemoval=true)
+            private Set<Showtime> showtimes = new HashSet<>();
+
+            public Integer getAvailableSeatCount() {
+                return (int) seats.stream()
+                        .filter(Seat::isActive)
+                        .count();
+            }
+            public boolean hasEnoughSeats() {
+                long activeSeatCount = seats.stream()
+                        .filter(Seat::isActive)
+                        .count();
+                return activeSeatCount > 0;
+            }
+
+
+            public Map<String, Long> getSeatCountByType() {
+                return seats.stream()
+                        .filter(Seat::isActive)
+                        .collect(Collectors.groupingBy(
+                                seat -> seat.getSeatType().name(),
+                                Collectors.counting()
+                        ));
+            }
+            public boolean isOperational() {
+                return isActive && hasEnoughSeats();
+            }
 }

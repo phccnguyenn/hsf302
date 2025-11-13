@@ -6,9 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import javafx.fe_movie_ticket.entity.enumeration.SeatType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -16,7 +14,8 @@ import java.math.BigDecimal;
 @Table(name = "seats")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Setter
+@Getter
 public class Seat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +31,8 @@ public class Seat {
     @Column(length = 5 ,nullable = false)
     private String rowLabel;
 
-    @Column(nullable = false)
-    private BigDecimal price;
+//    @Column(nullable = false)
+//    private BigDecimal price;
 
     @Column(nullable = false)
     private boolean isActive ;

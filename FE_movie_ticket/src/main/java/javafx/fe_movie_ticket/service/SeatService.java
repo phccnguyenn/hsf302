@@ -35,11 +35,6 @@ public class SeatService {
         seatRepository.save(seat);
     }
 
-    public Seat updateSeatPrice(Long seatId, BigDecimal newPrice) {
-        Seat seat = seatRepository.findById(seatId)
-                .orElseThrow(() -> new RuntimeException("Seat not found"));
-        seat.setPrice(newPrice);
-        return seatRepository.save(seat);
-    }
+
 
 }

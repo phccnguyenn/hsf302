@@ -1,14 +1,18 @@
 package javafx.fe_movie_ticket.service;
 
 import jakarta.transaction.Transactional;
+import javafx.fe_movie_ticket.entity.Auditorium;
+import javafx.fe_movie_ticket.entity.Movie;
 import javafx.fe_movie_ticket.entity.Showtime;
 import javafx.fe_movie_ticket.entity.enumeration.ShowtimeStatus;
 import javafx.fe_movie_ticket.repository.AuditoriumRepository;
+import javafx.fe_movie_ticket.repository.MovieRepository;
 import javafx.fe_movie_ticket.repository.ShowtimeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -17,32 +21,39 @@ import java.util.List;
 public class ShowtimeService {
     private final ShowtimeRepository showtimeRepository;
     private final AuditoriumRepository auditoriumRepository;
+    private final MovieRepository movieRepository;
+
 
 
 
     public Showtime createShowtime(Showtime showtime) {
 
-        if (showtime.getEndsAt().isBefore(showtime.getStartsAt())) {
-            throw new RuntimeException("End time must be after start time");
-        }
+        Movie movie = movieRepository.findById(showtime.getMovie().getMovieId())
+                .orElseThrow(() -> new RuntimeException("MOVIE_NOT_FOUND"));
+
+
+        Auditorium auditorium = auditoriumRepository.findById(showtime.getAuditorium().getAuditoriumId())
+                .orElseThrow(() -> new RuntimeException("AUDITORIUM_NOT_FOUND"));
+
+
 
         List<Showtime> conflictingShowtimes = showtimeRepository
-                .findConflictingShowtimes(showtime.getAuditorium().getAuditoriumId(),
-                        showtime.getStartsAt(), showtime.getEndsAt()
-                );
+                .findByAuditoriumAuditoriumIdAndStatusAndStartsAtBetweenOrEndsAtBetween(
+                        showtime.getAuditorium().getAuditoriumId(),
+                        ShowtimeStatus.ACTIVE,
+                        showtime.getStartsAt(), showtime.getEndsAt(),
+                        showtime.getStartsAt(), showtime.getEndsAt());
 
         if (!conflictingShowtimes.isEmpty()) {
-            throw new RuntimeException("Auditorium is not available at this time");
+            throw new RuntimeException("AUDITORIUM_IS_NOT_AVAILABLE_AT_THIS_TIME");
         }
+
+        showtime.setMovie(movie);
+        showtime.setAuditorium(auditorium);
+        showtime.setStatus(ShowtimeStatus.ACTIVE);
+
         return showtimeRepository.save(showtime);
     }
-
-    public List<Showtime> getShowtimesByCinema(Long cinemaId) {
-        return showtimeRepository.findByAuditoriumCinemaCinemaIdAndStartsAtAfter(
-                cinemaId, LocalDateTime.now());
-    }
-
-
 
 
     public List<Showtime> getUpcomingShowtimes() {
@@ -66,4 +77,13 @@ public class ShowtimeService {
 
         return showtimeRepository.save(showtime);
     }
+    public List<Showtime> getAllShowtimes() {
+        return showtimeRepository.findAll();
+    }
+
+    public void deleteShowtime(Long showtimeId) {
+        Showtime showtime = getShowtimeById(showtimeId);
+        showtimeRepository.delete(showtime);
+    }
+
 }

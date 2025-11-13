@@ -1,6 +1,8 @@
 package javafx.fe_movie_ticket.entity;
 
 import jakarta.persistence.*;
+import javafx.fe_movie_ticket.entity.enumeration.Category;
+
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -14,21 +16,21 @@ public class Refreshment {
     @Column(nullable = false)
     private String name;
     
-    private String description;
-    
     @Column(nullable = false)
     private double price;
-    
-    private String category; // "COMBO", "POPCORN", "DRINK", "SNACK"
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Category category; // "COMBO", "POPCORN", "DRINK", "SNACK"
     
     private String imageUrl;
-    
-    private boolean available = true;
+
+    private String description;
     
     // Constructors
     public Refreshment() {}
     
-    public Refreshment(String name, String description, double price, String category, String imageUrl) {
+    public Refreshment(String name, String description, double price, Category category, String imageUrl) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -36,10 +38,10 @@ public class Refreshment {
         this.imageUrl = imageUrl;
     }
     
-    public Refreshment(Long id, String name, String description, double price, String category, String imageUrl) {
+    public Refreshment(Long id, String name, String description, double price, Category category, String imageUrl) {
         this.id = id;
-        this.name = name;
         this.description = description;
+        this.name = name;
         this.price = price;
         this.category = category;
         this.imageUrl = imageUrl;
@@ -62,14 +64,6 @@ public class Refreshment {
         this.name = name;
     }
     
-    public String getDescription() {
-        return description;
-    }
-    
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
     public double getPrice() {
         return price;
     }
@@ -77,29 +71,28 @@ public class Refreshment {
     public void setPrice(double price) {
         this.price = price;
     }
-    
-    public String getCategory() {
+
+    public Category getCategory() {
         return category;
     }
-    
-    public void setCategory(String category) {
+
+    public void setCategory(Category category) {
         this.category = category;
     }
     
     public String getImageUrl() {
         return imageUrl;
     }
-    
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-    
-    public boolean isAvailable() {
-        return available;
-    }
-    
-    public void setAvailable(boolean available) {
-        this.available = available;
     }
     
     // Utility method to format price

@@ -34,7 +34,7 @@
             <td th:text="${movie.id}">1</td>
             <td th:text="${movie.title}">Movie Title</td>
             <td th:text="${movie.genre}">Genre</td>
-            <td th:text="${movie.durationMin}">120</td>
+            <td th:text="${movie.duration}">120</td>
             <td>
                         <span class="status-badge" th:classappend="${movie.status == 'NOW_SHOWING'} ? 'status-showing' : 'status-coming'" th:text="${movie.status}">
                             STATUS

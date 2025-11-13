@@ -37,7 +37,7 @@
         <div class="movie-showtimes-list">
             <div class="movie-listing-block" th:each="movieEntry : ${showtimesByMovie}">
                 <div class="movie-poster-column">
-                    <img th:src="${movieEntry.key.posterUrl}" alt="Movie Poster">
+                    <img th:src="${movieEntry.key.movieUrl}" alt="Movie Poster">
                 </div>
                 <div class="movie-details-column">
                     <div class="movie-title-header">

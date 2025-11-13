@@ -23,9 +23,10 @@ public class AuditoriumService {
             return auditoriumRepository.findByIsActiveTrue();
         }
 
-        public List<Auditorium> getAuditoriumsByLocation(String location) {
-            return auditoriumRepository.findByLocationContainingIgnoreCaseAndIsActiveTrue(location);
-        }
+        // Comment out vì Auditorium không có field 'location'
+        // public List<Auditorium> getAuditoriumsByLocation(String location) {
+        //     return auditoriumRepository.findByLocationContainingIgnoreCaseAndIsActiveTrue(location);
+        // }
 
 //        // Cập nhật thông tin auditorium
 //        public Auditorium updateAuditorium(Long auditoriumId, Auditorium auditoriumDetails) {

@@ -19,7 +19,8 @@ public interface ShowtimeRepository extends JpaRepository<Showtime, Long> {
 
     List<Showtime> findByAuditoriumCinemaCinemaIdAndStartsAtAfter(Long cinemaId, LocalDateTime dateTime);
 
-    List<Showtime> findByMovieIdAndStartsAtAfter(Long movieId, LocalDateTime dateTime);
+    // Sửa từ findByMovieId thành findByMovieMovieId để khớp với entity
+    List<Showtime> findByMovieMovieIdAndStartsAtAfter(Long movieId, LocalDateTime dateTime);
 
     List<Showtime> findByStartsAtAfterAndStatusOrderByStartsAt(LocalDateTime dateTime, ShowtimeStatus status);
 

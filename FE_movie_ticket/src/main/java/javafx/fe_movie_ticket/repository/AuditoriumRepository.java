@@ -11,7 +11,8 @@ public interface AuditoriumRepository extends JpaRepository<Auditorium, Long> {
 
     List<Auditorium> findByIsActiveTrue();
 
-    List<Auditorium> findByLocationContainingIgnoreCaseAndIsActiveTrue(String location);
+    // Comment out vì Auditorium không có field 'location'
+    // List<Auditorium> findByLocationContainingIgnoreCaseAndIsActiveTrue(String location);
 
     boolean existsByNameAndIsActiveTrue(String name);
 

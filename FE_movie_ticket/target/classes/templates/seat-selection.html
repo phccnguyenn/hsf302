@@ -10,13 +10,13 @@
     <!-- Movie Info Header -->
     <div class="movie-detail-header" style="margin-bottom: 40px;">
         <div class="poster-column">
-            <img th:src="${movie.posterUrl}" th:alt="${movie.title}" style="width: 100%; border-radius: 10px;">
+            <img th:src="${movie.movieUrl}" th:alt="${movie.title}" style="width: 100%; border-radius: 10px;">
         </div>
         <div class="info-column">
             <h1 th:text="${movie.title}" style="margin-bottom: 15px;"></h1>
             <div class="meta-info">
-                <span th:text="${movie.genre}"></span>
-                <span th:text="${movie.durationMin} + ' phút'"></span>
+                <span>Action</span>
+                <span th:text="${movie.duration} + ' phút'"></span>
                 <span class="rating" th:text="${movie.rating}"></span>
             </div>
             <div style="margin-top: 20px; color: var(--color-text-secondary);">

@@ -56,17 +56,17 @@
     <div id="now-showing-grid" class="movie-grid active">
         <div class="movie-card" th:each="movie : ${nowShowingMovies}">
             <!-- The movie card structure is identical -->
-            <img th:src="${movie.posterUrl}" alt="Movie Poster">
+            <img th:src="${movie.movieUrl}" alt="Movie Poster">
             <div class="movie-card-content">
                 <h3 th:text="${movie.title}">Movie Title</h3>
                 <p>
-                    <span th:text="${movie.genre}">Genre</span> |
-                    <span th:text="${movie.durationMin} + ' min'">Duration</span>
+                    <span>Action</span> |
+                    <span th:text="${movie.duration} + ' min'">Duration</span>
                 </p>
             </div>
             <div class="movie-card-actions">
-                <a th:href="@{/movies/{id}(id=${movie.id})}" class="btn btn-secondary">Details</a>
-                <a th:href="@{/booking/{id}/showtimes(id=${movie.id})}" class="btn btn-primary">Book Now</a>
+                <a th:href="@{/movies/{id}(id=${movie.movieId})}" class="btn btn-secondary">Details</a>
+                <a th:href="@{/booking/{id}/showtimes(id=${movie.movieId})}" class="btn btn-primary">Book Now</a>
             </div>
         </div>
     </div>
@@ -75,10 +75,10 @@
     <div id="coming-soon-grid" class="movie-grid">
         <div class="movie-card" th:each="movie : ${comingSoonMovies}">
             <!-- The movie card structure is identical -->
-            <img th:src="${movie.posterUrl}" alt="Movie Poster">
+            <img th:src="${movie.movieUrl}" alt="Movie Poster">
             <div class="movie-card-content">
                 <h3 th:text="${movie.title}">Movie Title</h3>
-                <p th:text="${movie.genre}">Genre</p>
+                <p>Action</p>
             </div>
             <div class="movie-card-actions">
                 <a href="#" class="btn btn-secondary">Details</a>

@@ -52,7 +52,7 @@
                     <h3 class="format-title">Rạp 2D</h3>
                     <div class="showtime-buttons">
                         <!-- Inner loop for the showtimes in the list -->
-                        <a th:href="@{/booking/select-seats/{movieId}/{showtimeId}(movieId=${movie.id}, showtimeId=${showtime.id})}"
+                        <a th:href="@{/booking/select-seats/{movieId}/{showtimeId}(movieId=${movie.movieId}, showtimeId=${showtime.id})}"
                            class="showtime-btn"
                            th:each="showtime : ${entry.value}">
                             <span class="time" th:text="${showtime.time}">00:00</span>

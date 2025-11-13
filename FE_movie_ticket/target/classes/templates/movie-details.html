@@ -13,16 +13,16 @@
     <div class="movie-detail-header">
         <!-- Left Column: Poster -->
         <div class="poster-column">
-            <img th:src="${movie.posterUrl}" th:alt="${movie.title} + ' Poster'">
+            <img th:src="${movie.movieUrl}" th:alt="${movie.title} + ' Poster'">
         </div>
 
         <!-- Right Column: Info -->
         <div class="info-column">
             <h1 th:text="${movie.title}">Movie Title</h1>
             <div class="meta-info">
-                <span class="rating" th:text="${movie.rating}">PG-13</span>
-                <span th:text="${movie.durationMin} + ' min'">Duration</span>
-                <span th:text="${movie.genre}">Genre</span>
+                <span class="rating">PG-13</span>
+                <span th:text="${movie.duration} + ' min'">Duration</span>
+                <span>Action</span>
             </div>
             <p class="synopsis" th:text="${movie.synopsis}">
                 This is the movie synopsis...
@@ -37,7 +37,7 @@
                   THIS IS THE NEW CALL TO ACTION:
                   It links directly to the dedicated showtimes page for this specific movie.
                 -->
-                <a th:href="@{/booking/{id}/showtimes(id=${movie.id})}" class="btn btn-primary book-tickets-btn">
+                <a th:href="@{/booking/{id}/showtimes(id=${movie.movieId})}" class="btn btn-primary book-tickets-btn">
                     Book Tickets
                 </a>
             </div>

@@ -1,7 +1,7 @@
 package javafx.fe_movie_ticket.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -9,17 +9,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private AdminInterceptor adminInterceptor;
+    private final AdminInterceptor adminInterceptor;
+
+    public WebConfig(AdminInterceptor adminInterceptor) {
+        this.adminInterceptor = adminInterceptor;
+    }
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
+    @SuppressWarnings("null")
+    public void addInterceptors(@NonNull InterceptorRegistry registry) {
         registry.addInterceptor(adminInterceptor)
                 .addPathPatterns("/**");
     }
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:uploads/");
     }

@@ -15,7 +15,8 @@ public interface SeatRepository extends JpaRepository<Seat,Long> {
     List<Seat> findBySeatType(SeatType seatType);
     List<Seat> findByAuditoriumAuditoriumIdAndIsActive(Long auditoriumId, Boolean isActive);
     List<Seat> findByRowLabelAndSeatNumber(String rowLabel, String seatNumber);
-    List<Seat> findByAuditoriumId(Long auditoriumId);
+    // Sửa từ findByAuditoriumId thành findByAuditoriumAuditoriumId để khớp với entity
+    List<Seat> findByAuditoriumAuditoriumId(Long auditoriumId);
     long countByAuditoriumAuditoriumId(Long auditoriumId);
 
     List<Seat> findByRowLabelAndAuditoriumAuditoriumIdAndIsActiveTrue(String rowLabel, Long auditoriumId);

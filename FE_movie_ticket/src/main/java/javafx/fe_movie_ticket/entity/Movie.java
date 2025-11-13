@@ -1,127 +1,46 @@
 package javafx.fe_movie_ticket.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+@Entity
+@Table(name = "movies")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Movie {
 
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "movie_id")
+    private Long movieId;
+
     private String title;
-    private String genre;
-    private int durationMin;
-    private String posterUrl;
-    private String status;
-    private String rating; // e.g., "PG-13"
-    private String synopsis;
-    private String trailerUrl; // A YouTube embed link
 
-    public Movie() {
-    }
+    private Integer duration;
 
-    public Movie(String title, String genre, int durationMin, String posterUrl, String status) {
-        this.title = title;
-        this.genre = genre;
-        this.durationMin = durationMin;
-        this.posterUrl = posterUrl;
-        this.status = status;
-    }
+    @Column(name = "release_date")
+    private OffsetDateTime releaseDate;
 
-    public Movie(Long id, String title, String genre, int durationMin, String posterUrl, String status) {
-        this.id = id;
-        this.title = title;
-        this.genre = genre;
-        this.durationMin = durationMin;
-        this.posterUrl = posterUrl;
-        this.status = status;
-    }
+    @Column(name = "is_active")
+    private boolean isActive;
 
-    public Movie(Long id, String title, String genre, int durationMin, String posterUrl, String status, String rating, String synopsis, String trailerUrl) {
-        this.id = id;
-        this.title = title;
-        this.genre = genre;
-        this.durationMin = durationMin;
-        this.posterUrl = posterUrl;
-        this.status = status;
-        this.rating = rating;
-        this.synopsis = synopsis;
-        this.trailerUrl = trailerUrl;
-    }
+    @Column(name = "movie_url")
+    private String movieUrl;
 
-    public String getTitle() {
-        return title;
-    }
+    @OneToMany(mappedBy = "movie")
+    private List<Genres> genresList = new ArrayList<>();
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    @OneToMany(mappedBy = "movie")
+    private List<Showtime> showtimeList = new ArrayList<>();
 
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
-    public int getDurationMin() {
-        return durationMin;
-    }
-
-    public void setDurationMin(int durationMin) {
-        this.durationMin = durationMin;
-    }
-
-    public String getPosterUrl() {
-        return posterUrl;
-    }
-
-    public void setPosterUrl(String posterUrl) {
-        this.posterUrl = posterUrl;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getRating() {
-        return rating;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
-
-    public String getSynopsis() {
-        return synopsis;
-    }
-
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
-    }
-
-    public String getTrailerUrl() {
-        return trailerUrl;
-    }
-
-    public void setTrailerUrl(String trailerUrl) {
-        this.trailerUrl = trailerUrl;
-    }
-    
-    // Alias method for compatibility
-    public int getDuration() {
-        return durationMin;
-    }
 }

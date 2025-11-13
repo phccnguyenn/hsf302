@@ -24,8 +24,9 @@ public class Showtime {
     @JoinColumn(name="auditorium_id")
     private Auditorium auditorium;
 
-    @Column(nullable=false)
-    private Long movieId;
+    @ManyToOne
+    @JoinColumn(name = "movie_id")
+    private Movie movie;
 
     @Column(name="starts_at", nullable=false)
     private LocalDateTime startsAt;

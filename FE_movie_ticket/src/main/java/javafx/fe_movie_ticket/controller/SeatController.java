@@ -38,21 +38,21 @@ public class SeatController {
         return ResponseEntity.ok(seat);
     }
 
-    // 🎯 Lấy ghế theo auditorium
+
     @GetMapping("/auditorium/{auditoriumId}")
     public ResponseEntity<List<Seat>> getSeatsByAuditorium(@PathVariable Long auditoriumId) {
         List<Seat> seats = seatService.getSeatsByAuditorium(auditoriumId);
         return ResponseEntity.ok(seats);
     }
 
-    // 🎯 Lấy ghế theo loại
+
     @GetMapping("/type/{seatType}")
     public ResponseEntity<List<Seat>> getSeatsByType(@PathVariable SeatType seatType) {
         List<Seat> seats = seatService.getSeatsByType(seatType);
         return ResponseEntity.ok(seats);
     }
 
-    // 🎯 Lấy ghế theo hàng
+
     @GetMapping("/auditorium/{auditoriumId}/row/{rowLabel}")
     public ResponseEntity<List<Seat>> getSeatsByRow(
             @PathVariable Long auditoriumId,
@@ -63,7 +63,7 @@ public class SeatController {
 
 
 
-    // 🎯 Kích hoạt lại ghế
+
     @PatchMapping("/{seatId}/activate")
     public ResponseEntity<Void> activateSeat(@PathVariable Long seatId) {
         seatService.activateSeat(seatId);
@@ -72,7 +72,7 @@ public class SeatController {
 
 
 
-    // 🎯 Lấy danh sách hàng ghế
+
     @GetMapping("/auditorium/{auditoriumId}/rows")
     public ResponseEntity<List<String>> getDistinctRows(@PathVariable Long auditoriumId) {
         List<String> rows = seatService.getDistinctRows(auditoriumId);

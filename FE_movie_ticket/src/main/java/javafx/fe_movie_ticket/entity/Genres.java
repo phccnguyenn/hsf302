@@ -19,9 +19,9 @@ public class Genres {
     @Column(name = "genres_id")
     private Long genresId;
 
-    @ManyToOne
-    @JoinColumn(name = "movie_id")
-    private Movie movie;
+//    @ManyToOne
+//    @JoinColumn(name = "movie_id")
+//    private Movie movie;
 
     @Column(name = "genres_name")
     private String genresName;

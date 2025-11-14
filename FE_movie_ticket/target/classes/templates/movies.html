@@ -81,7 +81,7 @@
                 <p>Action</p>
             </div>
             <div class="movie-card-actions">
-                <a href="#" class="btn btn-secondary">Details</a>
+                <a th:href="@{/movies/{id}(id=${movie.movieId})}" class="btn btn-secondary">Details</a>
             </div>
         </div>
     </div>

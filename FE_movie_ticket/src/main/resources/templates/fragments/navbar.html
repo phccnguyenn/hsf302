@@ -2,14 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<!--
-  This is our reusable navbar fragment.
-  We give it a name "navbar" using the th:fragment attribute.
--->
 <header class="main-header" th:fragment="navbar">
     <nav class="container main-nav">
         <div class="nav-logo">
-            <a th:href="@{/}">CINEPLEX</a> <!-- Use th:href for dynamic URLs -->
+            <a th:href="@{/}">CINEPLEX</a>
         </div>
         <div class="nav-links">
             <a th:href="@{/movies}">Movies</a>
@@ -17,11 +13,282 @@
             <a th:href="@{/events}">Events</a>
         </div>
         <div class="nav-actions">
-            <a th:href="@{/tickets}">My Tickets</a>
-            <a th:href="@{/login}" class="btn">Login</a>
+            <!-- Before Login -->
+            <div th:if="${session.userName == null}">
+                <a th:href="@{/register}" class="btn btn-outline">Register</a>
+                <a th:href="@{/login}" class="btn btn-primary">Login</a>
+            </div>
+            
+            <!-- After Login - CGV Style with Dropdown -->
+            <div th:if="${session.userName != null}" class="cgv-user-section">
+                <span class="cgv-greeting">Hello, <span th:text="${#strings.contains(session.userName, ' ') ? #strings.substring(session.userName, 0, #strings.indexOf(session.userName, ' ')) : session.userName}">User</span></span>
+                <div class="cgv-user-dropdown" id="cgvUserDropdown">
+                    <div class="cgv-avatar" onclick="toggleCGVMenu(event)">
+                        <div class="cgv-avatar-circle" th:text="${#strings.substring(session.userName, 0, 1)}">D</div>
+                    </div>
+                    <div class="cgv-dropdown-menu" id="cgvDropdownMenu">
+                        <a th:href="@{/tickets}" class="cgv-menu-item">
+                            <span class="cgv-icon"></span>
+                            <span>My Ticket</span>
+                        </a>
+                        <div class="cgv-divider"></div>
+                        <a th:href="@{/logout}" class="cgv-menu-item cgv-logout">
+                            <span class="cgv-icon">⏻</span>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 </header>
+
+<style>
+/* CGV User Section */
+.cgv-user-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cgv-greeting {
+    color: white;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.cgv-greeting span {
+    font-weight: 500;
+}
+
+/* CGV User Dropdown */
+.cgv-user-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* CGV Avatar - Clickable */
+.cgv-avatar {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.cgv-avatar:hover {
+    transform: scale(1.05);
+}
+
+.cgv-avatar-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e50914, #c62828);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* CGV Dropdown Menu */
+.cgv-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 160px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 9999;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.cgv-user-dropdown.open .cgv-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* CGV Menu Items */
+.cgv-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.cgv-menu-item:hover {
+    background-color: #f8f9fa;
+    color: #e50914;
+    text-decoration: none;
+}
+
+.cgv-icon {
+    font-size: 16px;
+    width: 18px;
+    text-align: center;
+}
+
+/* CGV Logout */
+.cgv-logout {
+    color: #dc3545;
+}
+
+.cgv-logout:hover {
+    background-color: #fff5f5;
+    color: #dc3545;
+}
+
+/* CGV Divider */
+.cgv-divider {
+    height: 1px;
+    background-color: #e9ecef;
+    margin: 0;
+}
+
+/* Login Buttons */
+.btn-outline {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
+    text-decoration: none;
+    color: white;
+}
+
+.btn-primary {
+    background: #e50914;
+    border: 1px solid #e50914;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: #c62828;
+    border-color: #c62828;
+    text-decoration: none;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(229, 9, 20, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .cgv-user-section {
+        gap: 10px;
+    }
+    
+    .cgv-greeting {
+        font-size: 12px;
+    }
+    
+    .cgv-avatar-circle {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+    
+    .cgv-dropdown-menu {
+        width: 140px;
+        right: -5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cgv-greeting {
+        font-size: 11px;
+    }
+    
+    .cgv-user-section {
+        gap: 8px;
+    }
+    
+    .cgv-avatar-circle {
+        width: 28px;
+        height: 28px;
+        font-size: 11px;
+    }
+    
+    .cgv-dropdown-menu {
+        width: 120px;
+    }
+</style>
+
+<!-- Additional CSS to hide old dropdown -->
+<style>
+/* Force hide any old dropdown elements */
+.dropdown-menu,
+.user-dropdown-menu,
+.dropdown-content,
+.user-section {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+</style>
+
+<script>
+function toggleCGVMenu(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById('cgvUserDropdown');
+    
+    if (dropdown) {
+        // Close other dropdowns first
+        document.querySelectorAll('.cgv-user-dropdown.open').forEach(d => {
+            if (d !== dropdown) d.classList.remove('open');
+        });
+        
+        // Toggle current dropdown
+        dropdown.classList.toggle('open');
+    }
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('cgvUserDropdown');
+    if (dropdown && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('open');
+    }
+});
+
+// Close dropdown with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const dropdown = document.getElementById('cgvUserDropdown');
+        if (dropdown) {
+            dropdown.classList.remove('open');
+        }
+    }
+});
+</script>
 
 </body>
 </html>

@@ -13,26 +13,6 @@
         <h1>Sign In</h1>
         <p class="login-subtitle">Welcome back! Please enter your details.</p>
 
-        <!-- Test Accounts Info -->
-        <div class="test-accounts-info">
-            <h3>🧪 Test Accounts</h3>
-            <div class="test-account">
-                <strong>Admin Access:</strong>
-                <br>Email: <code>admin@cineplex.vn</code>
-                <br>Password: <code>admin123</code>
-                <br><small>Access to admin dashboard</small>
-            </div>
-            <div class="test-account">
-                <strong>Regular User:</strong>
-                <br>Email: <code>user@example.com</code>
-                <br>Password: <code>user123</code>
-                <br><small>Access to user features</small>
-            </div>
-            <div class="quick-admin-access">
-                <a href="/admin-login" class="btn btn-outline btn-small">🚀 Quick Admin Access</a>
-            </div>
-        </div>
-
         <!-- Error Message -->
         <div th:if="${error}" class="alert alert-error">
             <span th:text="${error}">Error message</span>
@@ -75,54 +55,6 @@
 </main>
 
 <style>
-.test-accounts-info {
-    background-color: rgba(229, 9, 20, 0.1);
-    border: 1px solid rgba(229, 9, 20, 0.3);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 25px;
-    font-size: 0.9em;
-}
-
-.test-accounts-info h3 {
-    margin: 0 0 15px 0;
-    color: var(--color-primary);
-    font-size: 1.1em;
-}
-
-.test-account {
-    margin-bottom: 15px;
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 6px;
-}
-
-.test-account code {
-    background-color: #333;
-    color: var(--color-primary);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: 'Courier New', monospace;
-    font-size: 0.95em;
-}
-
-.test-account small {
-    color: var(--color-text-secondary);
-    font-style: italic;
-}
-
-.quick-admin-access {
-    text-align: center;
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(229, 9, 20, 0.2);
-}
-
-.btn-small {
-    padding: 8px 16px;
-    font-size: 0.9em;
-}
-
 .alert {
     padding: 12px 15px;
     margin-bottom: 20px;

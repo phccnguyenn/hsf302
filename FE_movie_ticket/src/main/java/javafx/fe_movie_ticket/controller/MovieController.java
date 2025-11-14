@@ -8,9 +8,11 @@ import javafx.fe_movie_ticket.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -28,9 +30,21 @@ public class MovieController {
     }
 
     @GetMapping("/movies")
-    public String allMovies() {
+    public String allMovies(Model model) {
         List<Movie> movies = movieService.getAllMovies();
-        return "";
+        
+        // Phân loại movies theo status
+        List<Movie> nowShowing = movies.stream()
+                .filter(Movie::isActive)
+                .toList();
+        
+        List<Movie> comingSoon = movies.stream()
+                .filter(movie -> !movie.isActive())
+                .toList();
+        
+        model.addAttribute("nowShowingMovies", nowShowing);
+        model.addAttribute("comingSoonMovies", comingSoon);
+        return "movies";
     }
 
     @PostMapping("/movie/{movieId}/update")
@@ -62,6 +76,57 @@ public class MovieController {
     public String deleteMovie (@PathVariable(name = "movieId") Long movieId) {
         movieService.deleteMovieById(movieId);
         return "";
+    }
+    
+    @GetMapping("/movies/{id}")
+    public String showMovieDetails(@PathVariable("id") Long movieId, Model model) {
+        try {
+            // Tìm movie từ database
+            List<Movie> allMovies = movieService.getAllMovies();
+            Movie movie = allMovies.stream()
+                    .filter(m -> m.getMovieId().equals(movieId))
+                    .findFirst()
+                    .orElse(null);
+            
+            if (movie == null) {
+                // Redirect về movies page nếu không tìm thấy
+                return "redirect:/movies";
+            }
+            
+            model.addAttribute("movie", movie);
+            return "movie-details";
+            
+        } catch (Exception e) {
+            log.error("Error loading movie details: {}", e.getMessage());
+            return "redirect:/movies";
+        }
+    }
+    
+    @GetMapping("/movies/{id}/book")
+    public String showBookingPage(@PathVariable("id") Long movieId, Model model, HttpSession session) {
+        // Kiểm tra đăng nhập
+        if (session.getAttribute("userName") == null) {
+            return "redirect:/login";
+        }
+        
+        try {
+            List<Movie> allMovies = movieService.getAllMovies();
+            Movie movie = allMovies.stream()
+                    .filter(m -> m.getMovieId().equals(movieId))
+                    .findFirst()
+                    .orElse(null);
+            
+            if (movie == null) {
+                return "redirect:/movies";
+            }
+            
+            model.addAttribute("movie", movie);
+            return "showtimes-by-movie";
+            
+        } catch (Exception e) {
+            log.error("Error loading booking page: {}", e.getMessage());
+            return "redirect:/movies";
+        }
     }
 
 //    @GetMapping("/movies")

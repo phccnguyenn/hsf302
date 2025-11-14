@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Storage Test - Cinema App</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hero-slide {
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        .hero-slide-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            border-radius: 10px;
+        }
+        .hero-slide-content {
+            position: relative;
+            z-index: 2;
+        }
+        .movie-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+        }
+        .movie-card img {
+            width: 100px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .test-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .status-ok { color: green; font-weight: bold; }
+        .status-fail { color: red; font-weight: bold; }
+        .btn-test { margin: 5px; }
+        #storageDisplay {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Include header -->
+            <div th:replace="fragments/header :: header"></div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">🧪 Local Storage Test Center</h1>
+
+        <!-- Hero Slides Test Section -->
+        <div class="test-section">
+            <h2>🖼️ Hero Slides Test</h2>
+            <p>Kiểm tra tất cả backdrop images có load được không:</p>
+            
+            <div class="row" th:if="${heroSlides}">
+                <div class="col-md-6" th:each="movie : ${heroSlides}">
+                    <div class="hero-slide" 
+                         th:style="'background-image: url(' + ${movie.backdropUrl} + ');'"
+                         th:data-movie-title="${movie.title}"
+                         th:data-backdrop-url="${movie.backdropUrl}">
+                        <div class="hero-slide-overlay"></div>
+                        <div class="hero-slide-content">
+                            <h4 th:text="${movie.title}">Movie Title</h4>
+                            <p th:text="${movie.description}">Description</p>
+                            <span class="image-status">⏳ Testing...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary btn-test" onclick="testAllHeroImages()">Test All Hero Images</button>
+            <div id="heroTestResults" class="mt-3"></div>
+        </div>
+
+        <!-- Movie Cards Test Section -->
+        <div class="test-section">
+            <h2>🎭 Movie Cards Test</h2>
+            <p>Kiểm tra poster images và hiển thị movie cards:</p>
+            
+            <div class="row" th:if="${nowShowingMovies}">
+                <div class="col-md-4" th:each="movie : ${nowShowingMovies}">
+                    <div class="movie-card">
+                        <div class="d-flex">
+                            <img th:src="${movie.movieUrl}" 
+                                 th:alt="${movie.title}"
+                                 onerror="this.src='/static/images/fallback-poster.jpg'">
+                            <div class="ms-3 flex-grow-1">
+                                <h5 th:text="${movie.title}">Movie Title</h5>
+                                <p><strong>Duration:</strong> <span th:text="${movie.duration}">120</span> mins</p>
+                                <p th:text="${movie.description}">Movie description</p>
+                                <a th:href="@{/booking/{id}/showtimes(id=${movie.movieId})}" 
+                                   class="btn btn-sm btn-primary">Book Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Local Storage Test Section -->
+        <div class="test-section">
+            <h2>💾 Local Storage Test</h2>
+            <p>Test basic localStorage operations:</p>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="storageKey" class="form-label">Key:</label>
+                        <input type="text" class="form-control" id="storageKey" placeholder="Enter key">
+                    </div>
+                    <div class="mb-3">
+                        <label for="storageValue" class="form-label">Value:</label>
+                        <textarea class="form-control" id="storageValue" rows="3" placeholder="Enter value"></textarea>
+                    </div>
+                    
+                    <button class="btn btn-success btn-test" onclick="saveToLocalStorage()">Save to Local Storage</button>
+                    <button class="btn btn-info btn-test" onclick="loadFromLocalStorage()">Load from Local Storage</button>
+                    <button class="btn btn-warning btn-test" onclick="clearLocalStorage()">Clear All Storage</button>
+                    <button class="btn btn-secondary btn-test" onclick="showAllStorage()">Show All Storage</button>
+                </div>
+                <div class="col-md-6">
+                    <h5>Storage Display:</h5>
+                    <div id="storageDisplay">Click "Show All Storage" to view data</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movie Favorites Test Section -->
+        <div class="test-section">
+            <h2>⭐ Movie Favorites Test</h2>
+            <p>Test saving/loading movie favorites with JSON:</p>
+            
+            <div th:if="${nowShowingMovies}" class="mb-3">
+                <button th:each="movie : ${nowShowingMovies}"
+                        class="btn btn-outline-warning btn-test"
+                        th:onclick="'addToFavorites(' + ${movie.movieId} + ', \'' + ${movie.title} + '\', \'' + ${movie.movieUrl} + '\')'">
+                    Add <span th:text="${movie.title}">Movie</span> to Favorites
+                </button>
+            </div>
+            
+            <button class="btn btn-primary btn-test" onclick="showFavorites()">Show My Favorites</button>
+            <button class="btn btn-danger btn-test" onclick="clearFavorites()">Clear Favorites</button>
+            
+            <div id="favoritesDisplay" class="mt-3"></div>
+        </div>
+
+        <!-- Session Storage Test Section -->
+        <div class="test-section">
+            <h2>⏰ Session Storage Test</h2>
+            <p>Test sessionStorage (data lost when browser closes):</p>
+            
+            <button class="btn btn-info btn-test" onclick="testSessionStorage()">Test Session Storage</button>
+            <button class="btn btn-secondary btn-test" onclick="showSessionData()">Show Session Data</button>
+            <button class="btn btn-warning btn-test" onclick="clearSessionStorage()">Clear Session</button>
+            
+            <div id="sessionDisplay" class="mt-3"></div>
+            
+            <p class="mt-3"><strong>Page Views:</strong> <span id="pageViews">0</span></p>
+        </div>
+
+        <!-- Results Section -->
+        <div class="test-section">
+            <h2>📊 Test Results</h2>
+            <div id="testResults" class="alert alert-info">
+                Test results will appear here...
+            </div>
+        </div>
+    </div>
+
+    <!-- Include footer -->
+    <div th:replace="fragments/footer :: footer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Page view counter using sessionStorage
+        window.onload = function() {
+            let views = sessionStorage.getItem('pageViews') || 0;
+            views = parseInt(views) + 1;
+            sessionStorage.setItem('pageViews', views);
+            document.getElementById('pageViews').textContent = views;
+            
+            log('Page loaded. Session page views: ' + views);
+        };
+
+        function log(message) {
+            const results = document.getElementById('testResults');
+            const time = new Date().toLocaleTimeString();
+            results.innerHTML += `[${time}] ${message}<br>`;
+            results.scrollTop = results.scrollHeight;
+        }
+
+        // Test Hero Images
+        function testAllHeroImages() {
+            const heroSlides = document.querySelectorAll('.hero-slide');
+            let results = '<h5>Hero Images Test Results:</h5>';
+            
+            heroSlides.forEach((slide, index) => {
+                const title = slide.getAttribute('data-movie-title');
+                const backdropUrl = slide.getAttribute('data-backdrop-url');
+                const statusSpan = slide.querySelector('.image-status');
+                
+                const testImage = new Image();
+                testImage.onload = function() {
+                    statusSpan.innerHTML = '<span class="status-ok">✅ OK</span>';
+                    results += `<div>${title}: <span class="status-ok">✅ Loaded</span></div>`;
+                    document.getElementById('heroTestResults').innerHTML = results;
+                };
+                testImage.onerror = function() {
+                    statusSpan.innerHTML = '<span class="status-fail">❌ Failed</span>';
+                    results += `<div>${title}: <span class="status-fail">❌ Failed</span></div>`;
+                    document.getElementById('heroTestResults').innerHTML = results;
+                    
+                    // Apply fallback gradient
+                    slide.style.backgroundImage = 'linear-gradient(135deg, #1F1F1F 0%, #333 50%, #E50914 100%)';
+                };
+                testImage.src = backdropUrl;
+            });
+            
+            log('Testing all hero images...');
+        }
+
+        // Local Storage Functions
+        function saveToLocalStorage() {
+            const key = document.getElementById('storageKey').value;
+            const value = document.getElementById('storageValue').value;
+            
+            if (!key) {
+                alert('Please enter a key');
+                return;
+            }
+            
+            try {
+                localStorage.setItem(key, value);
+                log(`Saved to localStorage: ${key} = ${value}`);
+                showAllStorage();
+            } catch (error) {
+                log(`Error saving to localStorage: ${error.message}`);
+            }
+        }
+
+        function loadFromLocalStorage() {
+            const key = document.getElementById('storageKey').value;
+            
+            if (!key) {
+                alert('Please enter a key to load');
+                return;
+            }
+            
+            const value = localStorage.getItem(key);
+            if (value !== null) {
+                document.getElementById('storageValue').value = value;
+                log(`Loaded from localStorage: ${key} = ${value}`);
+            } else {
+                log(`Key not found: ${key}`);
+            }
+        }
+
+        function clearLocalStorage() {
+            localStorage.clear();
+            document.getElementById('storageDisplay').textContent = 'Local storage cleared';
+            log('Cleared all localStorage data');
+        }
+
+        function showAllStorage() {
+            let display = 'Local Storage Contents:\n';
+            
+            if (localStorage.length === 0) {
+                display += 'No data found';
+            } else {
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    const value = localStorage.getItem(key);
+                    display += `${key}: ${value}\n`;
+                }
+            }
+            
+            document.getElementById('storageDisplay').textContent = display;
+        }
+
+        // Movie Favorites Functions
+        function addToFavorites(movieId, title, posterUrl) {
+            const favorites = JSON.parse(localStorage.getItem('movieFavorites')) || [];
+            
+            // Check if already exists
+            const exists = favorites.some(fav => fav.id === movieId);
+            if (exists) {
+                log(`${title} is already in favorites`);
+                return;
+            }
+            
+            const movie = {
+                id: movieId,
+                title: title,
+                posterUrl: posterUrl,
+                addedAt: new Date().toISOString()
+            };
+            
+            favorites.push(movie);
+            localStorage.setItem('movieFavorites', JSON.stringify(favorites));
+            
+            log(`Added ${title} to favorites`);
+        }
+
+        function showFavorites() {
+            const favorites = JSON.parse(localStorage.getItem('movieFavorites')) || [];
+            let display = '<h5>My Favorite Movies:</h5>';
+            
+            if (favorites.length === 0) {
+                display += '<p>No favorites saved yet</p>';
+            } else {
+                favorites.forEach(movie => {
+                    display += `
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <h6>${movie.title}</h6>
+                                <small>Added: ${new Date(movie.addedAt).toLocaleString()}</small>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            document.getElementById('favoritesDisplay').innerHTML = display;
+            log(`Showing ${favorites.length} favorite movies`);
+        }
+
+        function clearFavorites() {
+            localStorage.removeItem('movieFavorites');
+            document.getElementById('favoritesDisplay').innerHTML = '<p>Favorites cleared</p>';
+            log('Cleared all favorite movies');
+        }
+
+        // Session Storage Functions
+        function testSessionStorage() {
+            const testData = {
+                user: 'testUser',
+                preferences: { theme: 'dark', language: 'vi' },
+                timestamp: new Date().toISOString()
+            };
+            
+            sessionStorage.setItem('testData', JSON.stringify(testData));
+            log('Saved test data to sessionStorage');
+        }
+
+        function showSessionData() {
+            let display = 'Session Storage Contents:\n';
+            
+            if (sessionStorage.length === 0) {
+                display += 'No session data found';
+            } else {
+                for (let i = 0; i < sessionStorage.length; i++) {
+                    const key = sessionStorage.key(i);
+                    const value = sessionStorage.getItem(key);
+                    display += `${key}: ${value}\n`;
+                }
+            }
+            
+            document.getElementById('sessionDisplay').textContent = display;
+        }
+
+        function clearSessionStorage() {
+            sessionStorage.clear();
+            document.getElementById('sessionDisplay').textContent = 'Session storage cleared';
+            document.getElementById('pageViews').textContent = '0';
+            log('Cleared all sessionStorage data');
+        }
+    </script>
+</body>
+</html>

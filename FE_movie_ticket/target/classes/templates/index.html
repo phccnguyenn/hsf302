@@ -24,26 +24,13 @@
     <div class="swiper hero-swiper">
         <!-- 2. The wrapper for all the slides -->
         <div class="swiper-wrapper">
-            <!-- 3. Individual Slides -->
-            <div class="swiper-slide hero-slide" style="background-image: url('https://via.placeholder.com/1200x600.png/E50914/FFFFFF?text=DUNE:+PART+TWO');">
+            <!-- 3. Dynamic Individual Slides from Thymeleaf -->
+            <div class="swiper-slide hero-slide" th:each="movie : ${heroSlides}" 
+                 th:style="'background-image: url(' + ${movie.backdropUrl != null ? movie.backdropUrl : movie.movieUrl} + ');'">
                 <div class="hero-slide-content">
-                    <h2>Dune: Part Two</h2>
-                    <p>Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.</p>
-                    <a href="#" class="btn btn-primary">Book Now</a>
-                </div>
-            </div>
-            <div class="swiper-slide hero-slide" style="background-image: url('https://via.placeholder.com/1200x600.png/1F1F1F/FFFFFF?text=OPPENHEIMER');">
-                <div class="hero-slide-content">
-                    <h2>Oppenheimer</h2>
-                    <p>The story of American scientist J. Robert Oppenheimer and his role in the development of the atomic bomb.</p>
-                    <a href="#" class="btn btn-primary">Book Now</a>
-                </div>
-            </div>
-            <div class="swiper-slide hero-slide" style="background-image: url('https://via.placeholder.com/1200x600.png/333333/FFFFFF?text=SPIDER-MAN');">
-                <div class="hero-slide-content">
-                    <h2>Spider-Man: Across the Spider-Verse</h2>
-                    <p>Miles Morales catapults across the Multiverse, where he encounters a team of Spider-People charged with protecting its very existence.</p>
-                    <a href="#" class="btn btn-primary">Book Now</a>
+                    <h2 th:text="${movie.title}">Movie Title</h2>
+                    <p th:text="${movie.description != null ? movie.description : 'An exciting movie experience awaits you!'}">Movie Description</p>
+                    <a th:href="@{/booking/{id}/showtimes(id=${movie.movieId})}" class="btn btn-primary">Book Now</a>
                 </div>
             </div>
         </div>
@@ -73,8 +60,8 @@
             <button>Coming Soon</button>
         </div>
 
-        <!-- MOVIE GRID (DYNAMIC CONTENT) -->
-        <div class="movie-grid active">
+        <!-- NOW SHOWING GRID (DYNAMIC CONTENT) -->
+        <div class="movie-grid active" id="now-showing-grid">
             <!-- Thymeleaf Loop for "Now Showing" Movies -->
             <div class="movie-card" th:each="movie : ${nowShowingMovies}">
                 <img th:src="${movie.movieUrl}" alt="Movie Poster">
@@ -88,6 +75,25 @@
                 <div class="movie-card-actions">
                     <a th:href="@{/movies/{id}(id=${movie.movieId})}" class="btn btn-secondary">Details</a>
                     <a th:href="@{/booking/{id}/showtimes(id=${movie.movieId})}" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMING SOON GRID (DYNAMIC CONTENT) -->
+        <div class="movie-grid" id="coming-soon-grid" style="display: none;">
+            <!-- Thymeleaf Loop for "Coming Soon" Movies -->
+            <div class="movie-card" th:each="movie : ${comingSoonMovies}">
+                <img th:src="${movie.movieUrl}" alt="Movie Poster">
+                <div class="movie-card-content">
+                    <h3 th:text="${movie.title}">Movie Title</h3>
+                    <p>
+                        <span>Action</span> |
+                        <span th:text="${movie.duration} + ' min'">Duration</span>
+                    </p>
+                </div>
+                <div class="movie-card-actions">
+                    <a th:href="@{/movies/{id}(id=${movie.movieId})}" class="btn btn-secondary">Details</a>
+                    <button class="btn btn-primary" disabled>Coming Soon</button>
                 </div>
             </div>
         </div>
@@ -124,6 +130,53 @@
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
         },
+    });
+
+    // Tab switching functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabs = document.querySelectorAll('.movie-tabs button');
+        const nowShowingGrid = document.getElementById('now-showing-grid');
+        const comingSoonGrid = document.getElementById('coming-soon-grid');
+
+        tabs.forEach((tab, index) => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+
+                // Show/hide appropriate grid
+                if (index === 0) { // Now Showing
+                    nowShowingGrid.style.display = 'grid';
+                    comingSoonGrid.style.display = 'none';
+                } else { // Coming Soon
+                    nowShowingGrid.style.display = 'none';
+                    comingSoonGrid.style.display = 'grid';
+                }
+            });
+        });
+
+        // Hero slides image error handling
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        heroSlides.forEach((slide, index) => {
+            const bgImage = slide.style.backgroundImage;
+            if (bgImage) {
+                const imageUrl = bgImage.slice(4, -1).replace(/"/g, "");
+                
+                // Test if image loads
+                const testImage = new Image();
+                testImage.onload = function() {
+                    console.log(`✅ Hero slide ${index + 1} image loaded successfully`);
+                };
+                testImage.onerror = function() {
+                    console.log(`❌ Hero slide ${index + 1} image failed, using fallback`);
+                    // Use a solid color gradient as fallback
+                    slide.style.backgroundImage = 'linear-gradient(135deg, #1F1F1F 0%, #333 50%, #E50914 100%)';
+                };
+                testImage.src = imageUrl;
+            }
+        });
     });
 </script>
 </body>

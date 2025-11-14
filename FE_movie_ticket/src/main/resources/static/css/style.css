@@ -105,9 +105,12 @@ a {
     justify-content: start;
     padding: 50px;
     background-size: cover;
-    background-position: center;
+    background-position: center center;
+    background-repeat: no-repeat;
     position: relative;
     color: white;
+    min-height: 500px; /* Đảm bảo chiều cao tối thiểu */
+    height: 60vh; /* Responsive height */
 }
 
 /* Add a dark overlay so text is always readable */

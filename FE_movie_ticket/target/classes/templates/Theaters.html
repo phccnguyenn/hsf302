@@ -47,7 +47,7 @@
                     <div class="format-block" th:each="formatEntry : ${movieEntry.value}">
                         <h3 class="format-name" th:text="${formatEntry.key}">2D Phụ Đề Anh</h3>
                         <div class="showtime-buttons">
-                            <a th:href="@{/booking/select-seats/{movieId}/{showtimeId}(movieId=${movieEntry.key.id}, showtimeId=${showtime.id})}"
+                            <a th:href="@{/booking/select-seats/{movieId}/{showtimeId}(movieId=${movieEntry.key.movieId}, showtimeId=${showtime.showtimeId})}"
                                class="showtime-btn"
                                th:each="showtime : ${formatEntry.value}">
                                 <span class="time" th:text="${showtime.time}">00:00</span>

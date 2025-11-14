@@ -97,10 +97,10 @@
                             </td>
                             <td>
                                 <div class="action-buttons">
-                                    <a th:href="@{/admin/movies/edit/{id}(id=${movie.id})}" class="btn-action btn-edit" title="Chỉnh sửa">✏️</a>
-                                    <a th:href="@{/admin/movies/schedule/{id}(id=${movie.id})}" class="btn-action btn-schedule" title="Lịch chiếu">📅</a>
-                                    <a th:href="@{/admin/movies/analytics/{id}(id=${movie.id})}" class="btn-action btn-analytics" title="Thống kê">📊</a>
-                                    <button class="btn-action btn-delete" title="Xóa" th:onclick="'confirmDelete(' + ${movie.id} + ')'">🗑️</button>
+                                    <a th:href="@{/admin/movies/edit/{id}(id=${movie.movieId})}" class="btn-action btn-edit" title="Chỉnh sửa">✏️</a>
+                                    <a th:href="@{/admin/movies/schedule/{id}(id=${movie.movieId})}" class="btn-action btn-schedule" title="Lịch chiếu">📅</a>
+                                    <a th:href="@{/admin/movies/analytics/{id}(id=${movie.movieId})}" class="btn-action btn-analytics" title="Thống kê">📊</a>
+                                    <button class="btn-action btn-delete" title="Xóa" th:onclick="'confirmDelete(' + ${movie.movieId} + ')'">🗑️</button>
                                 </div>
                             </td>
                         </tr>

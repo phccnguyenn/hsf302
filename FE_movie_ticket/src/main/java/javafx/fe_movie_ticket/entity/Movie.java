@@ -37,6 +37,12 @@ public class Movie {
     @Column(name = "movie_url")
     private String movieUrl;
 
+    @Column(name = "description", length = 1000)
+    private String description;
+
+    @Column(name = "backdrop_url")
+    private String backdropUrl;
+
     @OneToMany(mappedBy = "movie")
     private List<Genres> genresList = new ArrayList<>();
 

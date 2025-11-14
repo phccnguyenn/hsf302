@@ -143,22 +143,22 @@
                                         <div>
                                             <strong th:text="${user.fullName}">Nguyễn Văn A</strong>
                                             <br>
-                                            <small class="text-muted" th:text="${user.username}">nguyenvana</small>
+                                            <small class="text-muted" th:text="${user.email}">nguyenvana@gmail.com</small>
                                         </div>
                                     </td>
                                     <td th:text="${user.email}">nguyenvana@gmail.com</td>
-                                    <td th:text="${user.phone}">0123456789</td>
+                                    <td th:text="${user.role}">USER</td>
                                     <td>
                                         <span class="badge" 
                                               th:class="${user.role == 'ADMIN' ? 'bg-danger' : (user.role == 'VIP' ? 'bg-warning' : 'bg-secondary')}"
                                               th:text="${user.role}">Customer</span>
                                     </td>
                                     <td>
-                                        <span class="badge" 
-                                              th:class="${user.status == 'ACTIVE' ? 'bg-success' : (user.status == 'LOCKED' ? 'bg-danger' : 'bg-warning')}"
-                                              th:text="${user.status}">Active</span>
+                                    <td><span class="badge"
+                                              th:class="${user.isActive ? 'bg-success' : 'bg-danger'}"
+                                              th:text="${user.isActive ? 'Active' : 'Inactive'}">Active</span>
                                     </td>
-                                    <td th:text="${user.createdDate}">10/11/2025</td>
+                                    <td th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy')}">10/11/2025</td>
                                     <td>
                                         <div class="btn-group" role="group">
                                             <button class="btn btn-sm btn-outline-primary" title="Xem chi tiết">

@@ -52,6 +52,9 @@ C:\Users\MinhCoffee\Desktop\HSF302_Cinema\hsf302\FE_movie_ticket\src\main\java\j
 C:\Users\MinhCoffee\Desktop\HSF302_Cinema\hsf302\FE_movie_ticket\src\main\java\javafx\fe_movie_ticket\repository\UserRepository.java
 C:\Users\MinhCoffee\Desktop\HSF302_Cinema\hsf302\FE_movie_ticket\src\main\java\javafx\fe_movie_ticket\service\AuditoriumService.java
 C:\Users\MinhCoffee\Desktop\HSF302_Cinema\hsf302\FE_movie_ticket\src\main\java\javafx\fe_movie_ticket\service\CinemaService.java
+C:\Users\MinhCoffee\Desktop\HSF302_Cinema\hsf302\FE_movie_ticket\src\main\java\javafx\fe_movie_ticket\service\ImageValidationService.java
+C:\Users\MinhCoffee\Desktop\HSF302_Cinema\hsf302\FE_movie_ticket\src\main\java\javafx\fe_movie_ticket\service\MovieDescriptionService.java
+C:\Users\MinhCoffee\Desktop\HSF302_Cinema\hsf302\FE_movie_ticket\src\main\java\javafx\fe_movie_ticket\service\MoviePosterService.java
 C:\Users\MinhCoffee\Desktop\HSF302_Cinema\hsf302\FE_movie_ticket\src\main\java\javafx\fe_movie_ticket\service\MovieService.java
 C:\Users\MinhCoffee\Desktop\HSF302_Cinema\hsf302\FE_movie_ticket\src\main\java\javafx\fe_movie_ticket\service\OrderService.java
 C:\Users\MinhCoffee\Desktop\HSF302_Cinema\hsf302\FE_movie_ticket\src\main\java\javafx\fe_movie_ticket\service\OrderServiceImpl.java

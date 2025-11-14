@@ -31,7 +31,7 @@
           và tạo một hàng (<tr>) cho mỗi bộ phim.
         -->
         <tr th:each="movie : ${movies}">
-            <td th:text="${movie.id}">1</td>
+            <td th:text="${movie.movieId}">1</td>
             <td th:text="${movie.title}">Movie Title</td>
             <td th:text="${movie.genre}">Genre</td>
             <td th:text="${movie.duration}">120</td>

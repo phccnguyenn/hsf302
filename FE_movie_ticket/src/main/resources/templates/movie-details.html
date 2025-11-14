@@ -1,55 +1,177 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/header :: header}"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cineplex - Movie Details</title>
+
+    <!-- Swiper.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+    <!-- Base stylesheet -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    
+    <!-- Movie Detail specific CSS -->
+    <link rel="stylesheet" th:href="@{/css/movie-detail.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
 
 <body>
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<main class="container">
-    <!-- ================================== -->
-    <!--      MOVIE INFORMATION SECTION     -->
-    <!-- ================================== -->
-    <div class="movie-detail-header">
-        <!-- Left Column: Poster -->
-        <div class="poster-column">
-            <img th:src="${movie.movieUrl}" th:alt="${movie.title} + ' Poster'">
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <a href="/movies">Movies</a>
+        <span>/</span>
+        <span th:text="${movie.title}">[Movie Title]</span>
+    </nav>
+
+    <!-- Main Movie Content -->
+    <div class="movie-content">
+        <!-- Movie Poster -->
+        <div class="movie-poster-section">
+            <img th:src="${movie.movieUrl}" 
+                 th:alt="${movie.title}" 
+                 class="movie-poster">
         </div>
 
-        <!-- Right Column: Info -->
-        <div class="info-column">
-            <h1 th:text="${movie.title}">Movie Title</h1>
-            <div class="meta-info">
-                <span class="rating">PG-13</span>
-                <span th:text="${movie.duration} + ' min'">Duration</span>
-                <span>Action</span>
+        <!-- Movie Info & Video -->
+        <div class="movie-info-section">
+            <!-- Movie Header -->
+            <div class="movie-header">
+                <h1 class="movie-title" th:text="${movie.title}">[Movie Title]</h1>
+                
+                <div class="movie-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">⭐</span>
+                        <span class="rating-badge" th:text="${movie.rating ?: '8.5'} + '/10'">8.5/10</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">⏱️</span>
+                        <span th:text="${movie.duration ?: '120'} + ' min'">120 min</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">📅</span>
+                        <span th:text="${#temporals.format(movie.releaseDate, 'dd/MM/yyyy')}">[Release Date]</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🎬</span>
+                        <span th:text="${movie.language ?: 'English'}">English</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🎭</span>
+                        <span th:text="${movie.ageRating ?: 'PG-13'}">PG-13</span>
+                    </div>
+                </div>
+                
+                <div class="genre-tags">
+                    <span class="genre-tag" 
+                          th:each="genre : ${movie.genres}"
+                          th:text="${genre.name}">Action</span>
+                    <span class="genre-tag" th:if="${#lists.isEmpty(movie.genres)}">Action</span>
+                    <span class="genre-tag" th:if="${#lists.isEmpty(movie.genres)}">Adventure</span>
+                </div>
+                
+                <p class="movie-description" th:text="${movie.description}">
+                    [Movie Description]
+                </p>
             </div>
-            <p class="synopsis" th:text="${movie.synopsis}">
-                This is the movie synopsis...
-            </p>
 
-            <!-- NEW: A wrapper for our action buttons -->
-            <div class="action-buttons">
-                <a th:href="${movie.trailerUrl}" target="_blank" class="btn btn-secondary trailer-btn">
-                    ▶ Watch Trailer
-                </a>
-                <!--
-                  THIS IS THE NEW CALL TO ACTION:
-                  It links directly to the dedicated showtimes page for this specific movie.
-                -->
-                <a th:href="@{/movies/{id}/book(id=${movie.movieId})}" class="btn btn-primary book-tickets-btn">
-                    Book Now
-                </a>
+            <!-- Video Section -->
+            <div class="video-section">
+                <div class="video-header">
+                    <h3 class="video-title">Movie Trailer</h3>
+                </div>
+                <div class="video-container">
+                    <iframe th:if="${movie.trailerUrl != null and movie.trailerUrl != ''}"
+                            th:src="${movie.trailerUrl}"
+                            class="trailer-video" 
+                            frameborder="0" 
+                            allowfullscreen>
+                    </iframe>
+                    <div th:if="${movie.trailerUrl == null or movie.trailerUrl == ''}" 
+                         class="video-placeholder">
+                        <span>Trailer coming soon...</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!--
-      THE ENTIRE <div class="booking-section"> HAS BEEN REMOVED.
-      This page is now purely for information.
-    -->
+    <!-- Movie Details Section -->
+    <div class="details-section">
+        <h2 class="section-title">Movie Details</h2>
+        <div class="details-grid">
+            <div class="detail-item">
+                <div class="detail-label">Title</div>
+                <div class="detail-value" th:text="${movie.title}">Movie Title</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Genre</div>
+                <div class="detail-value">
+                    <span th:each="genre, iterStat : ${movie.genres}">
+                        <span th:text="${genre.name}">Action</span>
+                        <span th:if="${!iterStat.last}">, </span>
+                    </span>
+                    <span th:if="${#lists.isEmpty(movie.genres)}">Action, Adventure</span>
+                </div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Duration</div>
+                <div class="detail-value" th:text="${movie.duration ?: '120'} + ' minutes'">120 minutes</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Rating</div>
+                <div class="detail-value" th:text="${movie.rating ?: '8.5'} + '/10'">8.5/10</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Release Date</div>
+                <div class="detail-value" th:text="${#temporals.format(movie.releaseDate, 'dd/MM/yyyy')}">Release Date</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Language</div>
+                <div class="detail-value" th:text="${movie.language ?: 'English'}">English</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Director</div>
+                <div class="detail-value" th:text="${movie.director ?: 'Christopher Nolan'}">Christopher Nolan</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Cast</div>
+                <div class="detail-value" th:text="${movie.cast ?: 'Matthew McConaughey, Anne Hathaway'}">Matthew McConaughey, Anne Hathaway</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Age Rating</div>
+                <div class="detail-value" th:text="${movie.ageRating ?: 'PG-13'}">PG-13</div>
+            </div>
+        </div>
+    </div>
 
-</main>
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="/" class="btn btn-back">
+            ← Back to Home
+        </a>
+        <a th:href="@{/showtimes/{id}(id=${movie.movieId})}" class="btn btn-book">
+            Book Now
+        </a>
+    </div>
+</div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>

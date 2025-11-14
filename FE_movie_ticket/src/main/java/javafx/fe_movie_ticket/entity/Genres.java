@@ -26,4 +26,9 @@ public class Genres {
     @Column(name = "genres_name")
     private String genresName;
 
+    // Getter alias for compatibility
+    public String getName() {
+        return this.genresName;
+    }
+
 }

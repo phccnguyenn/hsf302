@@ -43,10 +43,34 @@ public class Movie {
     @Column(name = "backdrop_url")
     private String backdropUrl;
 
+    @Column(name = "trailer_url")
+    private String trailerUrl;
+
+    private Double rating;
+
+    private String language;
+
+    private String director;
+
+    @Column(length = 500)
+    private String cast;
+
+    @Column(name = "age_rating")
+    private String ageRating;
+
     @OneToMany(mappedBy = "movie")
     private List<Genres> genresList = new ArrayList<>();
 
     @OneToMany(mappedBy = "movie")
     private List<Showtime> showtimeList = new ArrayList<>();
+
+    // Getter alias for compatibility
+    public Long getId() {
+        return this.movieId;
+    }
+
+    public List<Genres> getGenres() {
+        return this.genresList;
+    }
 
 }

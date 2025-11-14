@@ -66,7 +66,7 @@
             </div>
             <div class="movie-card-actions">
                 <a th:href="@{/movies/{id}(id=${movie.movieId})}" class="btn btn-secondary">Details</a>
-                <a th:href="@{/booking/{id}/showtimes(id=${movie.movieId})}" class="btn btn-primary">Book Now</a>
+                <a th:href="@{/movies/{id}/book(id=${movie.movieId})}" class="btn btn-primary">Book Now</a>
             </div>
         </div>
     </div>
